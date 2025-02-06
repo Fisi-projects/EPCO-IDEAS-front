@@ -2,7 +2,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
 import './App.css';
 import ClippedDrawer from './components/Sidebar/Sidebar';
-import {Box, Typography} from '@mui/material';
+import {Box} from '@mui/material';
+import RequestsTable from './pages/requests'; // Importar la tabla
+
 
 function App() {
   return (
@@ -10,8 +12,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex' }}>
         <ClippedDrawer/>
-        <Box sx={{marginTop:'70px'}}>
-          {/* Probar componente aqui */}
+        <Box sx={{ marginTop: '70px', width: '100%' }}>
+        <RequestsTable /> {/* Mostrar la tabla */}
         </Box>
         </Box>
       </ThemeProvider>
