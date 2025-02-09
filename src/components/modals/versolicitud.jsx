@@ -37,10 +37,10 @@ export default function ModalComponent(){
             open={open}
             onClose={handleClose}
             >
-                <Box sx={style} >
+                <Box sx={style}>
                     <Box> 
-                            <Typography variant="h6" component="h2">Detalles de Solicitud</Typography>
-                            <Typography variant="subtitle2" color="textSecondary">{datos.id}</Typography>
+                        <Typography variant="h6" component="h2">Detalles de Solicitud</Typography>
+                        <Typography variant="subtitle2" color="textSecondary">{datos.id}</Typography>
                     </Box>
                     <Box display="flex" flexDirection="column" gap={2} mt={2} sx={{borderBottom: 1, borderTop: 1}} >
                         <Box display="flex" flexDirection="column" mt={2}>
