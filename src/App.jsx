@@ -12,7 +12,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex' }}>
         <ClippedDrawer/>
-        <Box sx={{ marginTop: '70px', width: '100%' }}>
+        <Box sx={{ marginTop: '70px', width: '100%'}}>
         <RequestsTable /> {/* Mostrar la tabla */}
         </Box>
         </Box>

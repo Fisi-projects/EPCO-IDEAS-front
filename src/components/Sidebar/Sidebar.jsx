@@ -19,7 +19,6 @@ const drawerWidth = 250;
 export default function ClippedDrawer() {
     return (
         <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
           <AppBar
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, backgroundColor:'white' }}

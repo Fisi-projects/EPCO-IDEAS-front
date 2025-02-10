@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination
+  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography
 } from '@mui/material';
 import { Visibility, Download, Delete, FilterList, Edit } from '@mui/icons-material';
 
@@ -49,8 +49,8 @@ const RequestsTable = () => {
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <Box sx={{ padding: 2, width: '1130px', height: '650px', backgroundColor: '#f2f2f2' }}>
-      <h2>Lista de solicitudes</h2>
+    <Box sx={{ padding: "25px"}}>
+      <Typography variant="h2" >Lista de Solicitudes</Typography>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Box display="flex" gap={1}>
           <TextField
@@ -63,14 +63,14 @@ const RequestsTable = () => {
         </Box>
         <Box> Aqui va tu parte carlitos </Box> 
       </Box>
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ padding: 2, height: '650px' }}>
+      <Box>
+        <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
-            <Table sx={{ width: '100%' }}>
+            <Table>
               <TableHead>
                 <TableRow>
                   {['ID', 'Título', 'Cliente', 'Productos', 'Estado', 'Técnico', 'Acciones'].map((head) => (
-                    <TableCell key={head} align="left" sx={{ fontWeight: 'bold', fontFamily: 'Poppins, sans-serif' }}>
+                    <TableCell key={head} sx={{ fontWeight: 'bold'}}>
                       {head !== 'Acciones' ? (
                         <TableSortLabel
                           active={orderBy === head.toLowerCase()}
@@ -86,12 +86,12 @@ const RequestsTable = () => {
               </TableHead>
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow key={row.id} sx={{ height: '40px' }}>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.id}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.title}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.client}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.product}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.title}</TableCell>
+                    <TableCell>{row.client}</TableCell>
+                    <TableCell>{row.product}</TableCell>
+                    <TableCell>
                       <Chip
                         label={row.status}
                         sx={{
@@ -105,7 +105,7 @@ const RequestsTable = () => {
                             row.status === 'Pendiente' ? '#FFC078' : 
                             row.status === 'Completado' ? '#69BFF8' : 
                             '#F27573',
-                          borderRadius: '3px 0px 0px 0px',
+                          borderRadius: '3px',
                           padding: '4px 8px',
                           width: '92px',
                           height: '25px',
@@ -113,8 +113,8 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.technician}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>
+                    <TableCell>{row.technician}</TableCell>
+                    <TableCell>
                         <Box
                             sx={{
                             display: 'flex',
