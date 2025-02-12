@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography
+  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography,
+  Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { Visibility, Download, Delete, FilterList, Edit } from '@mui/icons-material';
+import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
 
 const createData = (id, title, client, product, status, technician) => {
   return { id, title, client, product, status, technician };
@@ -31,6 +32,8 @@ const RequestsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
+  const [open, setOpen] = useState(false);
+  const [stock, setStock] = useState(0);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -41,6 +44,11 @@ const RequestsTable = () => {
   const handlePageChange = (_, newPage) => {
     setPage(newPage - 1);
   };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const increaseStock = () => setStock(stock + 1);
+  const decreaseStock = () => setStock(stock > 0 ? stock - 1 : 0);
 
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
@@ -61,8 +69,35 @@ const RequestsTable = () => {
           />
           <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
         </Box>
-        <Box> Aqui va tu parte carlitos </Box> 
+        <Box>
+          <Button variant="contained" onClick={handleOpen}>Agregar Producto</Button>
+        </Box>
       </Box>
+      
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          Agregar Producto
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <TextField fullWidth margin="dense" label="Nombre" placeholder="Ingrese el nombre del producto" />
+          <TextField fullWidth margin="dense" label="Descripción del producto" placeholder="Placeholder" />
+          <TextField fullWidth margin="dense" label="Imagen de producto" placeholder="imagen.jpg" />
+          <Typography mt={2}>Stock</Typography>
+          <Box display="flex" alignItems="center" gap={1}>
+            <IconButton onClick={decreaseStock}><Remove /></IconButton>
+            <TextField value={stock} size="small" sx={{ width: 50, textAlign: 'center' }} />
+            <IconButton onClick={increaseStock}><Add /></IconButton>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button variant="contained" onClick={handleClose}>Guardar</Button>
+        </DialogActions>
+      </Dialog>
+      
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
