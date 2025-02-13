@@ -70,27 +70,40 @@ const RequestsTable = () => {
           <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
         </Box>
         <Box>
-          <Button variant="contained" onClick={handleOpen}>Agregar Producto</Button>
+          <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
         </Box>
       </Box>
       
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
-          Agregar Producto
+          Agregar Solicitud
           <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
             <Close />
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <TextField fullWidth margin="dense" label="Nombre" placeholder="Ingrese el nombre del producto" />
-          <TextField fullWidth margin="dense" label="Descripción del producto" placeholder="Placeholder" />
-          <TextField fullWidth margin="dense" label="Imagen de producto" placeholder="imagen.jpg" />
-          <Typography mt={2}>Stock</Typography>
-          <Box display="flex" alignItems="center" gap={1}>
-            <IconButton onClick={decreaseStock}><Remove /></IconButton>
-            <TextField value={stock} size="small" sx={{ width: 50, textAlign: 'center' }} />
-            <IconButton onClick={increaseStock}><Add /></IconButton>
-          </Box>
+          <TextField fullWidth margin="dense" label="Título *" placeholder="Título de la solicitud" />
+          <TextField fullWidth margin="dense" label="Cliente *" placeholder="Nombre del cliente" />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField fullWidth margin="dense" label="Celular *" placeholder="Número de contacto" />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField fullWidth margin="dense" label="Fecha" placeholder="xx/xx/20xx" />
+            </Grid>
+          </Grid>
+          <TextField fullWidth margin="dense" label="Productos" placeholder="Producto 1, Producto 2" />
+          <TextField fullWidth margin="dense" label="Descripción" placeholder="Descripción de la solicitud" multiline rows={3} />
+          <TextField fullWidth margin="dense" label="Dirección *" placeholder="Ingrese la dirección" />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField fullWidth margin="dense" label="Estado" placeholder="Estado actual" />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField fullWidth margin="dense" label="Prioridad" placeholder="Prioridad de la solicitud" />
+            </Grid>
+          </Grid>
+          <TextField fullWidth margin="dense" label="Equipo de trabajo *" placeholder="Ingrese el equipo asignado" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
