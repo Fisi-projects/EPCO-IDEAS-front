@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  InputLabel, Select, MenuItem, FormControl, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
 
@@ -33,7 +33,8 @@ const RequestsTable = () => {
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
   const [open, setOpen] = useState(false);
-  const [stock, setStock] = useState(0);
+  const [status, setStatus] = useState('Activo');
+  const [priority, setPriority] = useState('Media');
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -47,8 +48,6 @@ const RequestsTable = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const increaseStock = () => setStock(stock + 1);
-  const decreaseStock = () => setStock(stock > 0 ? stock - 1 : 0);
 
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
@@ -58,22 +57,20 @@ const RequestsTable = () => {
 
   return (
     <Box sx={{ padding: "25px"}}>
-      <Typography variant="h2" >Lista de Solicitudes</Typography>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Box display="flex" gap={1}>
-          <TextField
-            size="small"
-            variant="outlined"
-            placeholder="Buscar"
-            onChange={(e) => setFilter(e.target.value)}
-          />
-          <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
-        </Box>
-        <Box>
-          <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
-        </Box>
+      <Typography variant="h4">Lista de Solicitudes</Typography>
+
+      {/* Barra de búsqueda y botón de agregar */}
+      <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
+        <TextField
+          size="small"
+          variant="outlined"
+          placeholder="Buscar..."
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
       </Box>
       
+      {/* Diálogo para agregar solicitud */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           Agregar Solicitud
@@ -97,13 +94,24 @@ const RequestsTable = () => {
           <TextField fullWidth margin="dense" label="Dirección *" placeholder="Ingrese la dirección" />
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField fullWidth margin="dense" label="Estado" placeholder="Estado actual" />
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Estado</InputLabel>
+                <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+                  {statuses.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth margin="dense" label="Prioridad" placeholder="Prioridad de la solicitud" />
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Prioridad</InputLabel>
+                <Select value={priority} onChange={(e) => setPriority(e.target.value)}>
+                  <MenuItem value="Alta">Alta</MenuItem>
+                  <MenuItem value="Media">Media</MenuItem>
+                  <MenuItem value="Baja">Baja</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
-          <TextField fullWidth margin="dense" label="Equipo de trabajo *" placeholder="Ingrese el equipo asignado" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
