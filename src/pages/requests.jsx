@@ -35,6 +35,7 @@ const RequestsTable = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('Activo');
   const [priority, setPriority] = useState('Media');
+  const [product, setProduct] = useState(products[0]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -56,61 +57,35 @@ const RequestsTable = () => {
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <Box sx={{ padding: "25px"}}>
+    <Box sx={{ padding: "25px" }}>
       <Typography variant="h4">Lista de Solicitudes</Typography>
-
-      {/* Barra de búsqueda y botón de agregar */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
-        <TextField
-          size="small"
-          variant="outlined"
-          placeholder="Buscar..."
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
-      </Box>
+      <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
       
-      {/* Diálogo para agregar solicitud */}
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>
-          Agregar Solicitud
-          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
+          Solicitud
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 20, top: 20 }}>
             <Close />
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <TextField fullWidth margin="dense" label="Título *" placeholder="Título de la solicitud" />
-          <TextField fullWidth margin="dense" label="Cliente *" placeholder="Nombre del cliente" />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField fullWidth margin="dense" label="Celular *" placeholder="Número de contacto" />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth margin="dense" label="Fecha" placeholder="xx/xx/20xx" />
-            </Grid>
-          </Grid>
-          <TextField fullWidth margin="dense" label="Productos" placeholder="Producto 1, Producto 2" />
-          <TextField fullWidth margin="dense" label="Descripción" placeholder="Descripción de la solicitud" multiline rows={3} />
-          <TextField fullWidth margin="dense" label="Dirección *" placeholder="Ingrese la dirección" />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <FormControl fullWidth margin="dense">
-                <InputLabel>Estado</InputLabel>
-                <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-                  {statuses.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Título" placeholder="Ingrese el título" /></Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Productos</InputLabel>
+                <Select value={product} onChange={(e) => setProduct(e.target.value)}>
+                  {products.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
-              <FormControl fullWidth margin="dense">
-                <InputLabel>Prioridad</InputLabel>
-                <Select value={priority} onChange={(e) => setPriority(e.target.value)}>
-                  <MenuItem value="Alta">Alta</MenuItem>
-                  <MenuItem value="Media">Media</MenuItem>
-                  <MenuItem value="Baja">Baja</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Cliente" placeholder="Ingrese el cliente" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Ubicación" placeholder="Ingrese la ubicación" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Celular" placeholder="Ingrese el celular" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Fecha" placeholder="Ingrese la fecha" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Estado actual" placeholder="Ingrese el estado" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Equipo de trabajo" placeholder="Ingrese el equipo" /></Grid>
+            <Grid item xs={12}><TextField fullWidth label="Descripción del caso" placeholder="Ingrese la descripción" multiline rows={3} /></Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
