@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography
+  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography,
+  InputLabel, Select, MenuItem, FormControl, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { Visibility, Download, Delete, FilterList, Edit } from '@mui/icons-material';
+import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
 
 const createData = (id, title, client, product, status, technician) => {
   return { id, title, client, product, status, technician };
@@ -31,6 +32,10 @@ const RequestsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState('Activo');
+  const [priority, setPriority] = useState('Media');
+  const [product, setProduct] = useState(products[0]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -42,6 +47,9 @@ const RequestsTable = () => {
     setPage(newPage - 1);
   };
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
   );
@@ -49,20 +57,43 @@ const RequestsTable = () => {
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <Box sx={{ padding: "25px"}}>
-      <Typography variant="h2" >Lista de Solicitudes</Typography>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Box display="flex" gap={1}>
-          <TextField
-            size="small"
-            variant="outlined"
-            placeholder="Buscar"
-            onChange={(e) => setFilter(e.target.value)}
-          />
-          <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
-        </Box>
-        <Box> Aqui va tu parte carlitos </Box> 
-      </Box>
+    <Box sx={{ padding: "25px" }}>
+      <Typography variant="h4">Lista de Solicitudes</Typography>
+      <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
+      
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle>
+          Solicitud
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 20, top: 20 }}>
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Título" placeholder="Ingrese el título" /></Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Productos</InputLabel>
+                <Select value={product} onChange={(e) => setProduct(e.target.value)}>
+                  {products.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Cliente" placeholder="Ingrese el cliente" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Ubicación" placeholder="Ingrese la ubicación" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Celular" placeholder="Ingrese el celular" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Fecha" placeholder="Ingrese la fecha" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Estado actual" placeholder="Ingrese el estado" /></Grid>
+            <Grid item xs={12} sm={6}><TextField fullWidth label="Equipo de trabajo" placeholder="Ingrese el equipo" /></Grid>
+            <Grid item xs={12}><TextField fullWidth label="Descripción del caso" placeholder="Ingrese la descripción" multiline rows={3} /></Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button variant="contained" onClick={handleClose}>Guardar</Button>
+        </DialogActions>
+      </Dialog>
+      
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
