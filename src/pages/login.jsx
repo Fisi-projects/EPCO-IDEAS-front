@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
@@ -9,6 +9,8 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
+import { AuthContext } from '../context/AuthContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -42,10 +44,18 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn() {
+
+  const navigate = useNavigate();
+
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const {user, login} = useContext(AuthContext)
+
+  useEffect(()=>{
+    if(user)navigate('/login')
+  },[])
 
   const loginApiCall = async (email, password)=>{
     const response = await axios.post('http://localhost:3000/auth/login/', {
@@ -57,7 +67,6 @@ export default function SignIn() {
     }
     return response
   }
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -72,8 +81,16 @@ export default function SignIn() {
     try {
       const response = await loginApiCall(data.get('email'), data.get('password'))
       console.log('Login successful', response.data)
+      login(response.data.user, response.data.token)
+      navigate('/')
     } catch (error) {
       console.error(error)
+      //set password and email null
+      data.set('password', '')
+      data.set('email', '')
+      setTimeout(()=>{
+      }, 2000)
+
     }
   };
 
