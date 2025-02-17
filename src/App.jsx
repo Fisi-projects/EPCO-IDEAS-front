@@ -4,13 +4,14 @@ import './App.css';
 import ClippedDrawer from './components/Sidebar/Sidebar';
 import {Box} from '@mui/material';
 import RequestsTable from './pages/requests'; // Importar la tabla
+import SignIn from './pages/login';
 
 
 function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', justifyContent:'center' }}>
         <ClippedDrawer/>
         <Box sx={{ marginTop: '70px', width: '100%'}}>
         <RequestsTable /> {/* Mostrar la tabla */}

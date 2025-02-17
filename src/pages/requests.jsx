@@ -1,30 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography,
   InputLabel, Select, MenuItem, FormControl, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
-
-const createData = (id, title, client, product, status, technician) => {
-  return { id, title, client, product, status, technician };
-};
-
-const clients = ['Jeremy Rosillo', 'Sebastián Cueto', 'Kelly Bellido', 'Ricardo Calderon', 'Carlos Mendoza', 'Sebastian Castillo', 'Jhonatan Bartolo'];
-const products = ['Fisi', 'Uywa', 'Tachitoteam', 'Time2Share', 'Fisitech'];
-const statuses = ['Activo', 'Pendiente', 'Completado', 'Cancelado'];
-const technicians = ['Ninguno'];
-
-const rows = Array(25).fill().map((_, index) => 
-  createData(
-    index + 1, 
-    `Solicitud ${index + 1}`, 
-    clients[Math.floor(Math.random() * clients.length)], 
-    products[Math.floor(Math.random() * products.length)], 
-    statuses[Math.floor(Math.random() * statuses.length)], 
-    technicians[Math.floor(Math.random() * technicians.length)]
-  )
-);
+import data from '../data/db.json';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -35,7 +16,15 @@ const RequestsTable = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('Activo');
   const [priority, setPriority] = useState('Media');
-  const [product, setProduct] = useState(products[0]);
+  const [product, setProduct] = useState('');
+  const rows = data.solicitud;
+
+  // useEffect(() => {
+  //   fetch('http://localhost:3000/solicitud')
+  //     .then(response => response.json())
+  //     .then(data => setRows(data))
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -51,15 +40,17 @@ const RequestsTable = () => {
   const handleClose = () => setOpen(false);
 
   const filteredRows = rows.filter((row) =>
-    row.title.toLowerCase().includes(filter.toLowerCase())
+    row.titulo.toLowerCase().includes(filter.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
     <Box sx={{ padding: "25px" }}>
-      <Typography variant="h4">Lista de Solicitudes</Typography>
-      <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h2">Lista de Solicitudes</Typography>
+        <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
+      </Box>
       
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>
@@ -68,14 +59,13 @@ const RequestsTable = () => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={3}>
+        <DialogContent sx={{ paddingTop: '10px !important' }}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}><TextField fullWidth label="Título" placeholder="Ingrese el título" /></Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel>Productos</InputLabel>
-                <Select value={product} onChange={(e) => setProduct(e.target.value)}>
-                  {products.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+                <Select value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Seleccione el producto"> 
+                  {rows.map((row) => <MenuItem key={row.id} value={row.producto}>{row.producto}</MenuItem>)}
                 </Select>
               </FormControl>
             </Grid>
@@ -119,22 +109,22 @@ const RequestsTable = () => {
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.title}</TableCell>
-                    <TableCell>{row.client}</TableCell>
-                    <TableCell>{row.product}</TableCell>
+                    <TableCell>{row.titulo}</TableCell>
+                    <TableCell>{row.cliente}</TableCell>
+                    <TableCell>{row.producto}</TableCell>
                     <TableCell>
                       <Chip
-                        label={row.status}
+                        label={row.estado}
                         sx={{
                           backgroundColor: 
-                            row.status === 'Activo' ? '#EBF3EB' : 
-                            row.status === 'Pendiente' ? '#FFF4E5' : 
-                            row.status === 'Completado' ? '#E5F6FF' : 
+                            row.estado === 'En proceso' ? '#EBF3EB' : 
+                            row.estado === 'En espera' ? '#FFF4E5' : 
+                            row.estado === 'Finalizado' ? '#E5F6FF' : 
                             '#FDECEC',
                           color: 
-                            row.status === 'Activo' ? '#9DDDAF' : 
-                            row.status === 'Pendiente' ? '#FFC078' : 
-                            row.status === 'Completado' ? '#69BFF8' : 
+                            row.estado === 'En proceso' ? '#9DDDAF' : 
+                            row.estado === 'En espera' ? '#FFC078' : 
+                            row.estado === 'Finalizado' ? '#69BFF8' : 
                             '#F27573',
                           borderRadius: '3px',
                           padding: '4px 8px',
@@ -144,7 +134,7 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>{row.technician}</TableCell>
+                    <TableCell>{row.tecnico}</TableCell>
                     <TableCell>
                         <Box
                             sx={{
