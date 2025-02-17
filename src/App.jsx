@@ -13,13 +13,16 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path='/wasa' element={<h1>wasaaaa</h1>} />
           <Route path='/login' element={<SignIn />} />
-          <Route path='/' element={
+          <Route path='/*' element={
             <Box sx={{ display: 'flex', justifyContent:'center' }}>
             <ClippedDrawer/>
             <Box sx={{ marginTop: '70px', width: '100%'}}>
-            <RequestsTable /> {/* Mostrar la tabla */}
+              <Routes>
+                <Route path='/' element={<RequestsTable />} />
+                <Route path ='*' element={<h1>404 wasaa</h1>}/>
+                {/* Aca ponen las rutas que iran dentro del sidebar y header */}
+              </Routes>
             </Box>
             </Box>
           }/>
