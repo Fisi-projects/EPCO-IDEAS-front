@@ -201,5 +201,39 @@
             "estado": "En espera",
             "tecnico": "Marta Diaz"
         }
+    ],
+
+    "techs": [
+        {
+            "id": 1,
+            "nombre": "Carlos",
+            "apellido": "Gomez",
+            "dni": "12345678",
+            "fecha_nacimiento": "1985-03-22",
+            "celular": "987654321",
+            "correo": "carlos.gomez@example.com"
+        }
+    ],
+
+    "productos": [ 
+        {
+            "id": 1,
+            "nombre": "TV",
+            "descripcion": "wasasianos a la guerra",
+            "precio": "2021",
+            "imagen": "https://t4.ftcdn.net/jpg/05/02/26/29/360_F_502262924_FStXklnWAu66ZxI2CJOkQ9teE8Vv4hrF.jpg",
+            "stock": "123456789"
+        }
+        ,
+        {
+            "id": 2,
+            "nombre": "TV",
+            "descripcion": "wasasianos a la guerra",
+            "precio": "2021",
+            "imagen": "https://i.blogs.es/d542e0/samsung-55s85d/450_1000.jpg",
+            "stock": "123456789"
+        }
     ]
+
 }
+
