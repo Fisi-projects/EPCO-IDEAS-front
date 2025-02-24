@@ -58,7 +58,7 @@ export default function SignIn() {
   },[])
 
   const loginApiCall = async (email, password)=>{
-    const response = await axios.post('https://epco-ideas-back.onrender.com/login/', {
+    const response = await axios.post('https://epco-ideas-back.onrender.com/auth/login/', {
       email: email,
       password: password
     })
