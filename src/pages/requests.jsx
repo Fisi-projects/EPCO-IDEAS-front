@@ -46,16 +46,26 @@ const RequestsTable = () => {
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <Box sx={{ padding: "25px" }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h2">Lista de Solicitudes</Typography>
-        <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
+    <Box sx={{ padding: "20px 25px" }}>
+      <Typography variant="h2">Lista de Solicitudes</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '20px' }}>
+        <Box display="flex" gap={1}>
+          <TextField
+            size="small"
+            variant="outlined"
+            placeholder="Buscar"
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
+        </Box>
+      
+      <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
       </Box>
       
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           Solicitud
-          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 20, top: 20 }}>
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 15, top: 10 }}>
             <Close />
           </IconButton>
         </DialogTitle>
@@ -83,7 +93,7 @@ const RequestsTable = () => {
           <Button variant="contained" onClick={handleClose}>Guardar</Button>
         </DialogActions>
       </Dialog>
-      
+      {/* Tabla */}
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
@@ -108,7 +118,7 @@ const RequestsTable = () => {
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
+                    <TableCell sx={{width:"70px"}}>{row.id}</TableCell>
                     <TableCell>{row.titulo}</TableCell>
                     <TableCell>{row.cliente}</TableCell>
                     <TableCell>{row.producto}</TableCell>

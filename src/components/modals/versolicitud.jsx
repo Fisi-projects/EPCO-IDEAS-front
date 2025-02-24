@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import data from "../../data/db.json"
 
 const style = {
     position: "absolute",
@@ -15,7 +16,7 @@ const style = {
     p: 4,
   };
 
-export default function ModalComponent(){
+export default function VerSolicitud(){
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
