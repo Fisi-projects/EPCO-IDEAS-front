@@ -9,6 +9,7 @@ import ProductsTable from './pages/products'; // Importar la tabla productos
 import { Route, Routes } from 'react-router';
 import SignIn from './pages/login';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoutes from './routes/ProtectedRoutes';
 
 
 function App() {
@@ -23,10 +24,12 @@ function App() {
               <ClippedDrawer/>
               <Box sx={{ marginTop: '70px', width: '100%'}}>
                 <Routes>
-                  <Route path='/requests' element={<RequestsTable />} />
-                  <Route path='/techs' element={<TechsTable />} />
-                  <Route path='/products' element={<ProductsTable />} />
-                  <Route path='*' element={<h1>404 Página no encontrada</h1>} />
+                  <Route element={<ProtectedRoutes />}>
+                    <Route path='/' element={<RequestsTable />} />
+                    <Route path='/techs' element={<TechsTable />} />
+                    <Route path='/products' element={<ProductsTable />} />
+                    <Route path='*' element={<h1>404 Página no encontrada</h1>} />
+                  </Route>
                   {/* Aca ponen las rutas que iran dentro del sidebar y header */}
                 </Routes>
               </Box>

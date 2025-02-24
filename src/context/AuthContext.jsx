@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+//import PropTypes from 'prop-types';
 
 
 export const AuthContext = createContext();
@@ -18,7 +19,7 @@ export const AuthProvider = ({children}) => {
             navigate('/');
             return;
         }
-        navigate('/login');
+        //navigate('/login');
         return;
     }, [])
 
@@ -36,10 +37,13 @@ export const AuthProvider = ({children}) => {
         window.localStorage.removeItem('access_token');
     }
 
-
     return(
         <AuthContext.Provider value={{user, Token, login, logout}}>
             {children}
         </AuthContext.Provider>
     )
 }
+
+/* AuthProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+}; */
