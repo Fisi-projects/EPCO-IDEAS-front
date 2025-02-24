@@ -6,6 +6,9 @@ import {
 } from '@mui/material';
 import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
 import data from '../data/db.json';
+import AgregarSolicitud from '../components/modals/agregarSolicitud';
+import VerSolicitud from '../components/modals/verSolicitud';
+import EditarSolicitud from '../components/modals/editarSolicitud';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -13,10 +16,8 @@ const RequestsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
-  const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState('Activo');
-  const [priority, setPriority] = useState('Media');
-  const [product, setProduct] = useState('');
+  const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
+  
   const rows = data.solicitud;
 
   // useEffect(() => {
@@ -36,8 +37,32 @@ const RequestsTable = () => {
     setPage(newPage - 1);
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpenAgregarSolicitud = () => setOpenAgregarSolicitud(true);
+  const handleCloseAgregarSolicitud = () => setOpenAgregarSolicitud(false);
+
+  const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const handleOpenVerSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenVerSolicitud(true);
+  };
+
+  const handleCloseVerSolicitud = () => {
+    setOpenVerSolicitud(false);
+  };
+  
+  const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
+  
+  const handleOpenEditarSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenEditarSolicitud(true);
+  };
+
+  const handleCloseEditarSolicitud = () => {
+    setOpenEditarSolicitud(false);
+  };
+
 
   const filteredRows = rows.filter((row) =>
     row.titulo.toLowerCase().includes(filter.toLowerCase())
@@ -59,40 +84,10 @@ const RequestsTable = () => {
           <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
         </Box>
       
-      <Button variant="contained" onClick={handleOpen}>Agregar Solicitud</Button>
+      <Button variant="contained" onClick={handleOpenAgregarSolicitud}>Agregar Solicitud</Button>
       </Box>
       
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>
-          Solicitud
-          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 15, top: 10 }}>
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ paddingTop: '10px !important' }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Título" placeholder="Ingrese el título" /></Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Select value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Seleccione el producto"> 
-                  {rows.map((row) => <MenuItem key={row.id} value={row.producto}>{row.producto}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Cliente" placeholder="Ingrese el cliente" /></Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Ubicación" placeholder="Ingrese la ubicación" /></Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Celular" placeholder="Ingrese el celular" /></Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Fecha" placeholder="Ingrese la fecha" /></Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Estado actual" placeholder="Ingrese el estado" /></Grid>
-            <Grid item xs={12} sm={6}><TextField fullWidth label="Equipo de trabajo" placeholder="Ingrese el equipo" /></Grid>
-            <Grid item xs={12}><TextField fullWidth label="Descripción del caso" placeholder="Ingrese la descripción" multiline rows={3} /></Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button variant="contained" onClick={handleClose}>Guardar</Button>
-        </DialogActions>
-      </Dialog>
+      
       {/* Tabla */}
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
@@ -156,37 +151,19 @@ const RequestsTable = () => {
                             gap: 1
                             }}
                         >
-                            {[Visibility, Edit, Download, Delete].map((Icon, index) => (
-                            <Box
-                                key={index}
-                                sx={{
-                                border: `1px solid ${index === 3 ? 'red' : '#676767'}`,
-                                borderRadius: 1,
-                                p: 0.5,
-                                height: '35px',
-                                width: '35px',
-                                transition: 'background-color 0.3s',
-                                backgroundColor: 'transparent',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                '&:hover': {
-                                    backgroundColor: index === 3 ? 'rgba(255, 0, 0, 0.2)' : '#e0e0e0'
-                                }
-                                }}
-                            >
-                                <IconButton
-                                sx={{
-                                    color: index === 3 ? 'red' : '#676767',
-                                    height: '20px',
-                                    width: '20px',
-                                    '&:hover': { backgroundColor: 'transparent' }
-                                }}
-                                >
-                                <Icon />
-                                </IconButton>
-                            </Box>
-                            ))}
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Visibility />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenEditarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Download />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                            <Delete />
+                          </IconButton>
+                            
                         </Box>
                     </TableCell>
                   </TableRow>
@@ -222,6 +199,17 @@ const RequestsTable = () => {
           />
         </Grid>
       </Box>
+      <AgregarSolicitud open={openAgregarSolicitud} onClose={handleCloseAgregarSolicitud} />
+      <VerSolicitud
+        open={openVerSolicitud}
+        onClose={handleCloseVerSolicitud}
+        request={selectedRequest}
+      />
+      <EditarSolicitud
+        open={openEditarSolicitud}
+        onClose={handleCloseEditarSolicitud}
+        request={selectedRequest}
+      />
     </Box>
   );
 };

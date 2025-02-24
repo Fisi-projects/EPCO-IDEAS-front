@@ -28,8 +28,9 @@ const theme = createTheme({
             fontWeight: 600,
         },
         h4: {                   //Subtitulo de modal
-            fontSize: "15px",
+            fontSize: "14px",
             fontWeight: 400,
+            marginBottom: '8px',
         },    
         body1: {                //Texto de tabla - Texto de modal - Sidebar
             fontSize: "14px",
