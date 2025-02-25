@@ -57,7 +57,7 @@ const VisuallyHiddenInput = styled('input')({
       }
 
       try {
-            await axios.post('http://localhost:3000/productos/create', formData, {
+            await axios.post('https://epco-ideas-back.onrender.com/productos/create', formData, {
             headers: {
             'Content-Type': 'multipart/form-data',
             },
