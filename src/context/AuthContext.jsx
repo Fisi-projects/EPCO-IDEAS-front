@@ -16,10 +16,12 @@ export const AuthProvider = ({children}) => {
         if(storedUser && storedToken){
             setUser(JSON.parse(storedUser));
             setToken(storedToken);
-            navigate('/');
+            if (location.pathname === '/login' || location.pathname === '/register') {
+                navigate('/');
+              }
             return;
         }
-        //navigate('/login');
+        navigate('/login');
         return;
     }, [])
 

@@ -21,6 +21,10 @@ const ProductsTable = () => {
   const [Refresh, setRefresh] = useState(false);  //state para actualizar la tabla cuando se edita o eliminan productos
   //const products = data.productos;
 
+  const handleRefresh = ()=>{
+    setRefresh(!Refresh)
+  }
+
   useEffect(()=>{
     console.log('wasa')
     axios.get('https://epco-ideas-back.onrender.com/productos/all')
@@ -32,7 +36,7 @@ const ProductsTable = () => {
     .catch((error) => {
       console.log(error);
     });
-  },[])
+  },[Refresh])
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -52,6 +56,7 @@ const ProductsTable = () => {
   const handleOpenEditarProducto = (request) => {
     setSelectedRequest(request);
     setOpenEditarProducto(true);
+    console.log(request)
   };
 
   const handleCloseEditarProducto = () => {
@@ -110,7 +115,7 @@ const ProductsTable = () => {
                     </TableCell>                   
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.description}</TableCell>
-                    <TableCell>{product.price}</TableCell>
+                    <TableCell>S/{product.price}</TableCell>
                     <TableCell>{product.stock}</TableCell>
                     <TableCell>
                         <Box
@@ -162,6 +167,7 @@ const ProductsTable = () => {
       <AgregarProducto
         open={openAgregarProducto}
         onClose={handleCloseAgregarProducto}
+        handleRefresh={handleRefresh}
       />
       <EditarProducto
         open={openEditarProducto}
