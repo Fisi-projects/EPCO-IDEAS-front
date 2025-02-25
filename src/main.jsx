@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router'
 //import Modal from './components/modals/versolicitud.jsx' //PRUEBA PARA VER SOLICITUD
-
+//desactivar strict mode para deploy
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

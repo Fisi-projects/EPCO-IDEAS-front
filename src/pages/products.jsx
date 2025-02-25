@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   TableSortLabel, TextField, Button, Box, IconButton, Grid, Pagination, Typography,
   Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
-import data from '../data/db.json';
 import AgregarProducto from '../components/modals/Productos/agregarProducto';
 import EditarProducto from '../components/modals/Productos/editarProducto';
+import axios from 'axios';
 
 const ProductsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -17,7 +17,22 @@ const ProductsTable = () => {
   const [filter, setFilter] = useState('');
   const [openAgregarProducto, setOpenAgregarProducto] = useState(false);
   const [openEditarProducto, setOpenEditarProducto] = useState(false);
-  const products = data.productos;
+  const [products, setProducts] = useState(null);
+  const [Refresh, setRefresh] = useState(false);  //state para actualizar la tabla cuando se edita o eliminan productos
+  //const products = data.productos;
+
+  useEffect(()=>{
+    console.log('wasa')
+    axios.get('https://epco-ideas-back.onrender.com/productos/all')
+    .then((res) => {
+      //console.log(res.data)
+      setProducts(res.data)
+      }
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+  },[])
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -42,9 +57,9 @@ const ProductsTable = () => {
   const handleCloseEditarProducto = () => {
     setOpenEditarProducto(false);
   };
-  const filteredProducts = products.filter((product) =>
-    product.nombre.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredProducts = products ? products.filter((product) =>
+    product.name.toLowerCase().includes(filter.toLowerCase())
+  ) : [];
 
   const totalPages = Math.ceil(filteredProducts.length / rowsPerPage);
 
@@ -91,11 +106,11 @@ const ProductsTable = () => {
                   <TableRow key={product.id}>
                     <TableCell>{product.id}</TableCell>
                     <TableCell>
-                       <img src={product.imagen} alt={product.nombre} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                       <img src={product.image} alt={product.nombre} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                     </TableCell>                   
-                    <TableCell>{product.nombre}</TableCell>
-                    <TableCell>{product.descripcion}</TableCell>
-                    <TableCell>{product.precio}</TableCell>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{product.description}</TableCell>
+                    <TableCell>{product.price}</TableCell>
                     <TableCell>{product.stock}</TableCell>
                     <TableCell>
                         <Box
