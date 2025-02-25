@@ -6,7 +6,7 @@ import {
   } from '@mui/material';
   import { useState } from 'react';
   
-  const VerSolicitud = ({ open, onClose, request }) => {
+  const EditarSolicitud = ({ open, onClose, request }) => {
     if (!request) return null; // Si no hay solicitud, no renderizar nada
     const [estado, setEstado] = useState('');
     const [tecnico, setTecnico] = useState('');
@@ -80,4 +80,4 @@ import {
     );
   };
   
-  export default VerSolicitud;
+  export default EditarSolicitud;

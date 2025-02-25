@@ -25,7 +25,7 @@ const icons = {
 };
 
 const routes = {
-  'Solicitudes': '/requests',
+  'Solicitudes': '/',
   'Tecnicos': '/techs',
   'Almacen': '/products'
 };

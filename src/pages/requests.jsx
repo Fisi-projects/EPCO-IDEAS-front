@@ -6,9 +6,9 @@ import {
 } from '@mui/material';
 import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
 import data from '../data/db.json';
-import AgregarSolicitud from '../components/modals/agregarSolicitud';
-import VerSolicitud from '../components/modals/verSolicitud';
-import EditarSolicitud from '../components/modals/editarSolicitud';
+import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
+import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
+import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -17,6 +17,8 @@ const RequestsTable = () => {
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
+  const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
+  const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
   
   const rows = data.solicitud;
 
@@ -40,7 +42,6 @@ const RequestsTable = () => {
   const handleOpenAgregarSolicitud = () => setOpenAgregarSolicitud(true);
   const handleCloseAgregarSolicitud = () => setOpenAgregarSolicitud(false);
 
-  const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const handleOpenVerSolicitud = (request) => {
@@ -52,7 +53,6 @@ const RequestsTable = () => {
     setOpenVerSolicitud(false);
   };
   
-  const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
   
   const handleOpenEditarSolicitud = (request) => {
     setSelectedRequest(request);
@@ -92,11 +92,11 @@ const RequestsTable = () => {
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
-            <Table>
+            <Table >
               <TableHead>
                 <TableRow>
                   {['ID', 'Título', 'Cliente', 'Productos', 'Estado', 'Técnico', 'Acciones'].map((head) => (
-                    <TableCell key={head} sx={{ fontWeight: 'bold'}}>
+                    <TableCell key={head} sx={{ fontWeight: 'bold',...(head === 'Acciones' && { textAlign: 'center' })}}>
                       {head !== 'Acciones' ? (
                         <TableSortLabel
                           active={orderBy === head.toLowerCase()}
@@ -113,7 +113,7 @@ const RequestsTable = () => {
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell sx={{width:"70px"}}>{row.id}</TableCell>
+                    <TableCell>{row.id}</TableCell>
                     <TableCell>{row.titulo}</TableCell>
                     <TableCell>{row.cliente}</TableCell>
                     <TableCell>{row.producto}</TableCell>
