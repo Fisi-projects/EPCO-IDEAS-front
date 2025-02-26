@@ -1,29 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination
+  TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography,
+  InputLabel, Select, MenuItem, FormControl, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { Visibility, Download, Delete, FilterList, Edit } from '@mui/icons-material';
-
-const createData = (id, title, client, product, status, technician) => {
-  return { id, title, client, product, status, technician };
-};
-
-const clients = ['Jeremy Rosillo', 'Sebastián Cueto', 'Kelly Bellido', 'Ricardo Calderon', 'Carlos Mendoza', 'Sebastian Castillo', 'Jhonatan Bartolo'];
-const products = ['Fisi', 'Uywa', 'Tachitoteam', 'Time2Share', 'Fisitech'];
-const statuses = ['Activo', 'Pendiente', 'Completado', 'Cancelado'];
-const technicians = ['Ninguno'];
-
-const rows = Array(25).fill().map((_, index) => 
-  createData(
-    index + 1, 
-    `Solicitud ${index + 1}`, 
-    clients[Math.floor(Math.random() * clients.length)], 
-    products[Math.floor(Math.random() * products.length)], 
-    statuses[Math.floor(Math.random() * statuses.length)], 
-    technicians[Math.floor(Math.random() * technicians.length)]
-  )
-);
+import { Visibility, Download, Delete, FilterList, Edit, Add, Remove, Close } from '@mui/icons-material';
+import data from '../data/db.json';
+import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
+import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
+import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -31,6 +16,18 @@ const RequestsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
+  const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
+  const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
+  const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
+  
+  const rows = data.solicitud;
+
+  // useEffect(() => {
+  //   fetch('http://localhost:3000/solicitud')
+  //     .then(response => response.json())
+  //     .then(data => setRows(data))
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -42,16 +39,41 @@ const RequestsTable = () => {
     setPage(newPage - 1);
   };
 
+  const handleOpenAgregarSolicitud = () => setOpenAgregarSolicitud(true);
+  const handleCloseAgregarSolicitud = () => setOpenAgregarSolicitud(false);
+
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const handleOpenVerSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenVerSolicitud(true);
+  };
+
+  const handleCloseVerSolicitud = () => {
+    setOpenVerSolicitud(false);
+  };
+  
+  
+  const handleOpenEditarSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenEditarSolicitud(true);
+  };
+
+  const handleCloseEditarSolicitud = () => {
+    setOpenEditarSolicitud(false);
+  };
+
+
   const filteredRows = rows.filter((row) =>
-    row.title.toLowerCase().includes(filter.toLowerCase())
+    row.titulo.toLowerCase().includes(filter.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <Box sx={{ padding: 2, width: '1130px', height: '650px', backgroundColor: '#f2f2f2' }}>
-      <h2>Lista de solicitudes</h2>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+    <Box sx={{ padding: "20px 25px" }}>
+      <Typography variant="h2">Lista de Solicitudes</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '20px' }}>
         <Box display="flex" gap={1}>
           <TextField
             size="small"
@@ -61,16 +83,20 @@ const RequestsTable = () => {
           />
           <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
         </Box>
-        <Box> Aqui va tu parte carlitos </Box> 
+      
+      <Button variant="contained" onClick={handleOpenAgregarSolicitud}>Agregar Solicitud</Button>
       </Box>
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ padding: 2, height: '650px' }}>
+      
+      
+      {/* Tabla */}
+      <Box>
+        <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
-            <Table sx={{ width: '100%' }}>
+            <Table >
               <TableHead>
                 <TableRow>
                   {['ID', 'Título', 'Cliente', 'Productos', 'Estado', 'Técnico', 'Acciones'].map((head) => (
-                    <TableCell key={head} align="left" sx={{ fontWeight: 'bold', fontFamily: 'Poppins, sans-serif' }}>
+                    <TableCell key={head} sx={{ fontWeight: 'bold',...(head === 'Acciones' && { textAlign: 'center' })}}>
                       {head !== 'Acciones' ? (
                         <TableSortLabel
                           active={orderBy === head.toLowerCase()}
@@ -86,26 +112,26 @@ const RequestsTable = () => {
               </TableHead>
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow key={row.id} sx={{ height: '40px' }}>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.id}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.title}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.client}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.product}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.titulo}</TableCell>
+                    <TableCell>{row.cliente}</TableCell>
+                    <TableCell>{row.producto}</TableCell>
+                    <TableCell>
                       <Chip
-                        label={row.status}
+                        label={row.estado}
                         sx={{
                           backgroundColor: 
-                            row.status === 'Activo' ? '#EBF3EB' : 
-                            row.status === 'Pendiente' ? '#FFF4E5' : 
-                            row.status === 'Completado' ? '#E5F6FF' : 
+                            row.estado === 'En proceso' ? '#EBF3EB' : 
+                            row.estado === 'En espera' ? '#FFF4E5' : 
+                            row.estado === 'Finalizado' ? '#E5F6FF' : 
                             '#FDECEC',
                           color: 
-                            row.status === 'Activo' ? '#9DDDAF' : 
-                            row.status === 'Pendiente' ? '#FFC078' : 
-                            row.status === 'Completado' ? '#69BFF8' : 
+                            row.estado === 'En proceso' ? '#9DDDAF' : 
+                            row.estado === 'En espera' ? '#FFC078' : 
+                            row.estado === 'Finalizado' ? '#69BFF8' : 
                             '#F27573',
-                          borderRadius: '3px 0px 0px 0px',
+                          borderRadius: '3px',
                           padding: '4px 8px',
                           width: '92px',
                           height: '25px',
@@ -113,8 +139,8 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>{row.technician}</TableCell>
-                    <TableCell sx={{ padding: '10px 8px' }}>
+                    <TableCell>{row.tecnico}</TableCell>
+                    <TableCell>
                         <Box
                             sx={{
                             display: 'flex',
@@ -125,37 +151,19 @@ const RequestsTable = () => {
                             gap: 1
                             }}
                         >
-                            {[Visibility, Edit, Download, Delete].map((Icon, index) => (
-                            <Box
-                                key={index}
-                                sx={{
-                                border: `1px solid ${index === 3 ? 'red' : '#676767'}`,
-                                borderRadius: 1,
-                                p: 0.5,
-                                height: '35px',
-                                width: '35px',
-                                transition: 'background-color 0.3s',
-                                backgroundColor: 'transparent',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                '&:hover': {
-                                    backgroundColor: index === 3 ? 'rgba(255, 0, 0, 0.2)' : '#e0e0e0'
-                                }
-                                }}
-                            >
-                                <IconButton
-                                sx={{
-                                    color: index === 3 ? 'red' : '#676767',
-                                    height: '20px',
-                                    width: '20px',
-                                    '&:hover': { backgroundColor: 'transparent' }
-                                }}
-                                >
-                                <Icon />
-                                </IconButton>
-                            </Box>
-                            ))}
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Visibility />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenEditarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                            <Download />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                            <Delete />
+                          </IconButton>
+                            
                         </Box>
                     </TableCell>
                   </TableRow>
@@ -191,6 +199,17 @@ const RequestsTable = () => {
           />
         </Grid>
       </Box>
+      <AgregarSolicitud open={openAgregarSolicitud} onClose={handleCloseAgregarSolicitud} />
+      <VerSolicitud
+        open={openVerSolicitud}
+        onClose={handleCloseVerSolicitud}
+        request={selectedRequest}
+      />
+      <EditarSolicitud
+        open={openEditarSolicitud}
+        onClose={handleCloseEditarSolicitud}
+        request={selectedRequest}
+      />
     </Box>
   );
 };

@@ -1,0 +1,239 @@
+{
+    "solicitud": [
+        {
+            "id": 1,
+            "titulo": "solicitud 1",
+            "cliente": "Juan Perez",
+            "producto": "TV",
+            "estado": "En proceso",
+            "tecnico": "Carlos Gomez"
+        },
+        {
+            "id": 2,
+            "titulo": "solicitud 2",
+            "cliente": "Maria Lopez",
+            "producto": "Refrigeradora",
+            "estado": "En espera",
+            "tecnico": "Luis Martinez"
+        },
+        {
+            "id": 3,
+            "titulo": "solicitud 3",
+            "cliente": "Pedro Sanchez",
+            "producto": "Lavadora",
+            "estado": "Finalizado",
+            "tecnico": "Ana Rodriguez"
+        },
+        {
+            "id": 4,
+            "titulo": "solicitud 4",
+            "cliente": "Laura Fernandez",
+            "producto": "Microondas",
+            "estado": "Cancelado",
+            "tecnico": "Jorge Ramirez"
+        },
+        {
+            "id": 5,
+            "titulo": "solicitud 5",
+            "cliente": "Jose Torres",
+            "producto": "Aire acondicionado",
+            "estado": "En proceso",
+            "tecnico": "Marta Diaz"
+        },
+        {
+            "id": 6,
+            "titulo": "solicitud 6",
+            "cliente": "Sofia Ramirez",
+            "producto": "Computadora",
+            "estado": "En espera",
+            "tecnico": "Carlos Gomez"
+        },
+        {
+            "id": 7,
+            "titulo": "solicitud 7",
+            "cliente": "Andres Castillo",
+            "producto": "Impresora",
+            "estado": "Finalizado",
+            "tecnico": "Luis Martinez"
+        },
+        {
+            "id": 8,
+            "titulo": "solicitud 8",
+            "cliente": "Lucia Morales",
+            "producto": "Tablet",
+            "estado": "Cancelado",
+            "tecnico": "Ana Rodriguez"
+        },
+        {
+            "id": 9,
+            "titulo": "solicitud 9",
+            "cliente": "Miguel Herrera",
+            "producto": "Celular",
+            "estado": "En proceso",
+            "tecnico": "Jorge Ramirez"
+        },
+        {
+            "id": 10,
+            "titulo": "solicitud 10",
+            "cliente": "Elena Vargas",
+            "producto": "Televisor",
+            "estado": "En espera",
+            "tecnico": "Marta Diaz"
+        },
+        {
+            "id": 11,
+            "titulo": "solicitud 11",
+            "cliente": "Ricardo Diaz",
+            "producto": "Cámara",
+            "estado": "Finalizado",
+            "tecnico": "Carlos Gomez"
+        },
+        {
+            "id": 12,
+            "titulo": "solicitud 12",
+            "cliente": "Patricia Rojas",
+            "producto": "Proyector",
+            "estado": "Cancelado",
+            "tecnico": "Luis Martinez"
+        },
+        {
+            "id": 13,
+            "titulo": "solicitud 13",
+            "cliente": "Fernando Ruiz",
+            "producto": "Consola de videojuegos",
+            "estado": "En proceso",
+            "tecnico": "Ana Rodriguez"
+        },
+        {
+            "id": 14,
+            "titulo": "solicitud 14",
+            "cliente": "Gabriela Torres",
+            "producto": "Router",
+            "estado": "En espera",
+            "tecnico": "Jorge Ramirez"
+        },
+        {
+            "id": 15,
+            "titulo": "solicitud 15",
+            "cliente": "Daniela Gutierrez",
+            "producto": "Monitor",
+            "estado": "Finalizado",
+            "tecnico": "Marta Diaz"
+        },
+        {
+            "id": 16,
+            "titulo": "solicitud 16",
+            "cliente": "Hector Alvarez",
+            "producto": "Teclado",
+            "estado": "En proceso",
+            "tecnico": "Carlos Gomez"
+        },
+        {
+            "id": 17,
+            "titulo": "solicitud 17",
+            "cliente": "Isabel Romero",
+            "producto": "Mouse",
+            "estado": "En espera",
+            "tecnico": "Luis Martinez"
+        },
+        {
+            "id": 18,
+            "titulo": "solicitud 18",
+            "cliente": "Javier Ortega",
+            "producto": "Parlantes",
+            "estado": "Finalizado",
+            "tecnico": "Ana Rodriguez"
+        },
+        {
+            "id": 19,
+            "titulo": "solicitud 19",
+            "cliente": "Karen Mendoza",
+            "producto": "Cámara web",
+            "estado": "Cancelado",
+            "tecnico": "Jorge Ramirez"
+        },
+        {
+            "id": 20,
+            "titulo": "solicitud 20",
+            "cliente": "Luis Gutierrez",
+            "producto": "Smartwatch",
+            "estado": "En proceso",
+            "tecnico": "Marta Diaz"
+        },
+        {
+            "id": 21,
+            "titulo": "solicitud 21",
+            "cliente": "Monica Herrera",
+            "producto": "Auriculares",
+            "estado": "En espera",
+            "tecnico": "Carlos Gomez"
+        },
+        {
+            "id": 22,
+            "titulo": "solicitud 22",
+            "cliente": "Nicolas Castro",
+            "producto": "Micrófono",
+            "estado": "Finalizado",
+            "tecnico": "Luis Martinez"
+        },
+        {
+            "id": 23,
+            "titulo": "solicitud 23",
+            "cliente": "Olga Ruiz",
+            "producto": "Horno",
+            "estado": "Cancelado",
+            "tecnico": "Ana Rodriguez"
+        },
+        {
+            "id": 24,
+            "titulo": "solicitud 24",
+            "cliente": "Pablo Morales",
+            "producto": "Licuadora",
+            "estado": "En proceso",
+            "tecnico": "Jorge Ramirez"
+        }
+        ,
+        {
+            "id": 25,
+            "titulo": "solicitud 25",
+            "cliente": "Raul Fernandez",
+            "producto": "Cafetera",
+            "estado": "En espera",
+            "tecnico": "Marta Diaz"
+        }
+    ],
+
+    "techs": [
+        {
+            "id": 1,
+            "nombre": "Carlos",
+            "apellido": "Gomez",
+            "dni": "12345678",
+            "fecha_nacimiento": "1985-03-22",
+            "celular": "987654321",
+            "correo": "carlos.gomez@example.com"
+        }
+    ],
+
+    "productos": [ 
+        {
+            "id": 1,
+            "nombre": "TV",
+            "descripcion": "wasasianos a la guerra",
+            "precio": "2021",
+            "imagen": "https://t4.ftcdn.net/jpg/05/02/26/29/360_F_502262924_FStXklnWAu66ZxI2CJOkQ9teE8Vv4hrF.jpg",
+            "stock": "123456789"
+        }
+        ,
+        {
+            "id": 2,
+            "nombre": "TV",
+            "descripcion": "wasasianos a la guerra",
+            "precio": "2021",
+            "imagen": "https://i.blogs.es/d542e0/samsung-55s85d/450_1000.jpg",
+            "stock": "123456789"
+        }
+    ]
+
+}
+
