@@ -5,10 +5,13 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
-import data from '../data/db.json';
 import EditarTecnico from '../components/modals/Tecnicos/editarTecnico';
 import AgregarTecnico from '../components/modals/Tecnicos/agregarTecnico';
 import EliminarElemento from '../components/modals/eliminarElemento';
+import { useEffect } from 'react';
+import axios from 'axios';
+
+const url= 'https://epco-ideas-back.onrender.com/users/tecnicos/delete';
 
 const TechsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -19,9 +22,26 @@ const TechsTable = () => {
   const [openAgregarTecnico, setOpenAgregarTecnico] = useState(false);
   const [openEditarTecnico, setOpenEditarTecnico] = useState(false);
   const [openEliminarTecnico, setOpenEliminarTecnico] = useState(false);
-  const techs = data.techs;
+  const [refresh, setRefresh] = useState(false);
+  const [techs, setTechs] = useState([]);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  }
+
+  useEffect(()=>{
+    axios.get('https://epco-ideas-back.onrender.com/users/tecnicos/all')
+    .then((response) => {
+      console.log(response.data);
+      setTechs(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  },
+  [refresh]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -52,7 +72,7 @@ const TechsTable = () => {
     setOpenEliminarTecnico(false);
   };
   const filteredTechs = techs.filter((tech) =>
-    tech.nombre.toLowerCase().includes(filter.toLowerCase())
+    tech.nombres.toLowerCase().includes(filter.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredTechs.length / rowsPerPage);
@@ -99,12 +119,12 @@ const TechsTable = () => {
                 {filteredTechs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((tech) => (
                   <TableRow key={tech.id}>
                     <TableCell sx={{width:"70px"}}>{tech.id}</TableCell>
-                    <TableCell>{tech.nombre}</TableCell>
-                    <TableCell>{tech.apellido}</TableCell>
-                    <TableCell>{tech.celular}</TableCell>
-                    <TableCell>{tech.correo}</TableCell>
+                    <TableCell>{tech.nombres}</TableCell>
+                    <TableCell>{tech.apellidos}</TableCell>
+                    <TableCell>{tech.telefono}</TableCell>
+                    <TableCell>{tech.email}</TableCell>
                     <TableCell>{tech.dni}</TableCell>
-                    <TableCell>{tech.fecha_nacimiento}</TableCell>
+                    <TableCell>{tech.fecha_nac.split('T')[0]}</TableCell>
                     <TableCell>
                         <Box
                             sx={{
@@ -155,16 +175,20 @@ const TechsTable = () => {
       <AgregarTecnico
         open={openAgregarTecnico}
         onClose={handleCloseAgregarTecnico}
+        handleRefresh={handleRefresh}
       />
       <EditarTecnico
         open={openEditarTecnico}
         onClose={handleCloseEditarTecnico}
         request={selectedRequest}
+        handleRefresh={handleRefresh}
       />
       <EliminarElemento
         open={openEliminarTecnico}
         onClose={handleCloseEliminarTecnico}
         request={selectedRequest}
+        url={url}
+        handleRefresh={handleRefresh}
       />
     </Box>
   );
