@@ -35,8 +35,9 @@ const RequestsTable = () => {
     axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
     // //http://localhost:3000/solicitudes/table
     .then((res) => {
-      setRows(res.data)
-      console.log(res.data);
+      const sortedData = res.data.sort((a, b) => a.id - b.id);
+      setRows(sortedData);
+      console.log(sortedData);
     })
     .catch((error) => {
       console.log(error);
