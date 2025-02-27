@@ -9,6 +9,7 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
+import axios from 'axios';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -19,8 +20,9 @@ const RequestsTable = () => {
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
   const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
-  
-  const rows = data.solicitud;
+  const [rows, setRows] = useState([]);
+
+  //const rows = data.solicitud;
 
   // useEffect(() => {
   //   fetch('http://localhost:3000/solicitud')
@@ -28,6 +30,18 @@ const RequestsTable = () => {
   //     .then(data => setRows(data))
   //     .catch(error => console.error('Error fetching data:', error));
   // }, []);
+  useEffect(()=>{
+    console.log('Requests being fetched');
+    axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
+    // //http://localhost:3000/solicitudes/table
+    .then((res) => {
+      setRows(res.data)
+      console.log(res.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } , [])
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -65,7 +79,7 @@ const RequestsTable = () => {
 
 
   const filteredRows = rows.filter((row) =>
-    row.titulo.toLowerCase().includes(filter.toLowerCase())
+    row.title.toLowerCase().includes(filter.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
@@ -114,9 +128,15 @@ const RequestsTable = () => {
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.titulo}</TableCell>
-                    <TableCell>{row.cliente}</TableCell>
-                    <TableCell>{row.producto}</TableCell>
+                    <TableCell>{row.title}</TableCell>
+                    <TableCell>{row.cliente_nombre}</TableCell>
+                    <TableCell>
+                      {row.productos_nombres.map((producto, index) => (
+                        <p key={index}>
+                          {producto.length > 20 ? `${producto.substring(0, 20)}...` : producto}
+                        </p>
+                      ))}
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={row.estado}
@@ -139,7 +159,7 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>{row.tecnico}</TableCell>
+                    <TableCell>{row.tecnico_nombre}</TableCell>
                     <TableCell>
                         <Box
                             sx={{
