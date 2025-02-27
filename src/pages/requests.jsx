@@ -9,8 +9,10 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
+
 import EliminarSolicitud from '../components/modals/Solicitud/EliminarSolicitud';
 import axios from 'axios';
+
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -21,8 +23,10 @@ const RequestsTable = () => {
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
   const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
+
   const [openEliminarSolicitud, setOpenEliminarSolicitud] = useState(false);
   const [rows, setRows] = useState([]);
+
 
   useEffect(() => {
     console.log('Requests being fetched');
@@ -36,6 +40,10 @@ const RequestsTable = () => {
       console.log(error);
     });
   } , [])
+
+  const handleRefresh = ()=>{
+    setRefresh(!refresh);
+  }
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -71,6 +79,7 @@ const RequestsTable = () => {
   };
 
   const handleOpenEliminarSolicitud = (request) => {
+
     setSelectedRequest(request);
     setOpenEliminarSolicitud(true);
   };
@@ -89,6 +98,7 @@ const RequestsTable = () => {
       console.log(error);
     });
   };
+
 
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
@@ -136,6 +146,7 @@ const RequestsTable = () => {
               </TableHead>
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.title}</TableCell>
@@ -147,19 +158,20 @@ const RequestsTable = () => {
                         </p>
                       ))}
                     </TableCell>
+
                     <TableCell>
                       <Chip
-                        label={row.estado}
+                        label={row?.estado}
                         sx={{
                           backgroundColor: 
-                            row.estado === 'En proceso' ? '#EBF3EB' : 
-                            row.estado === 'En espera' ? '#FFF4E5' : 
-                            row.estado === 'Finalizado' ? '#E5F6FF' : 
+                            row?.estado === 'En proceso' ? '#EBF3EB' : 
+                            row?.estado === 'En espera' ? '#FFF4E5' : 
+                            row?.estado === 'Finalizado' ? '#E5F6FF' : 
                             '#FDECEC',
                           color: 
-                            row.estado === 'En proceso' ? '#9DDDAF' : 
-                            row.estado === 'En espera' ? '#FFC078' : 
-                            row.estado === 'Finalizado' ? '#69BFF8' : 
+                            row?.estado === 'En proceso' ? '#9DDDAF' : 
+                            row?.estado === 'En espera' ? '#FFC078' : 
+                            row?.estado === 'Finalizado' ? '#69BFF8' : 
                             '#F27573',
                           borderRadius: '3px',
                           padding: '4px 8px',
@@ -169,7 +181,9 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
+
                     <TableCell>{row.tecnico_nombre}</TableCell>
+
                     <TableCell>
                         <Box
                             sx={{
@@ -245,6 +259,12 @@ const RequestsTable = () => {
         handleRefresh={handleRefresh}
       />
       <EliminarSolicitud
+        open={openEliminarSolicitud}
+        onClose={handleCloseEliminarSolicitud}
+        request={selectedRequest}
+        handleRefresh={handleRefresh}
+      />
+      <EliminarElemento
         open={openEliminarSolicitud}
         onClose={handleCloseEliminarSolicitud}
         request={selectedRequest}

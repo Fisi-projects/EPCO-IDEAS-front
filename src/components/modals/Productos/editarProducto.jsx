@@ -58,6 +58,17 @@ const EditarProducto = ({ open, onClose, request }) => {
         setImage(URL.createObjectURL(selectedFile));
     }
 
+    const handleStockInputChange = (e) => {
+        const value = e.target.value;
+        if (value === '') {
+          setStock(0);
+        } else {
+          const parsedValue = parseInt(value, 10);
+          if (!isNaN(parsedValue) && parsedValue >= 0) {
+            setStock(parsedValue);
+          }
+        }
+      };
 
     if (!request) return null;
 
@@ -99,7 +110,7 @@ const EditarProducto = ({ open, onClose, request }) => {
                             <Button onClick={() => handleStockChange(-1)} variant="outlined" disabled={stock === 0}>
                                 <Remove />
                             </Button>
-                            <TextField value={stock} sx={{ width: "70px", textAlign: 'center' }} />
+                            <TextField value={stock} onChange={handleStockInputChange} sx={{ width: "70px", textAlign: 'center' }} />
                             <Button onClick={() => handleStockChange(1)} variant="outlined">
                                 <Add />
                             </Button>

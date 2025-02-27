@@ -75,7 +75,19 @@ const VisuallyHiddenInput = styled('input')({
     const handleStockChange = (change) => {
         setStock((prev) => Math.max(0, prev + change));
         };
-
+    
+    const handleStockInputChange = (e) => {
+      const value = e.target.value;
+      if (value === '') {
+        setStock(0);
+      } else {
+        const parsedValue = parseInt(value, 10);
+        if (!isNaN(parsedValue) && parsedValue >= 0) {
+          setStock(parsedValue);
+        }
+      }
+    };
+    
     return (
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
         <DialogTitle sx={{ borderBottom: '1px solid #d1d1d1' }}>
@@ -121,7 +133,7 @@ const VisuallyHiddenInput = styled('input')({
                     <Button onClick={() => handleStockChange(-1)} variant="outlined" disabled={stock === 0}>
                         <Remove/>
                     </Button>
-                    <TextField value={stock} sx={{ width: "70px", textAlign:'center' }}/>
+                    <TextField value={stock} onChange={handleStockInputChange} sx={{ width: "70px", textAlign:'center' }}/>
                     <Button onClick={() => handleStockChange(1)} variant="outlined" >
                         <Add/>
                     </Button>

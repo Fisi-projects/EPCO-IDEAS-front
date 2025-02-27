@@ -7,7 +7,10 @@ import {
 import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
 import AgregarProducto from '../components/modals/Productos/agregarProducto';
 import EditarProducto from '../components/modals/Productos/editarProducto';
+import EliminarElemento from '../components/modals/eliminarElemento';
 import axios from 'axios';
+
+const urlEliminate = 'https://epco-ideas-back.onrender.com/productos/delete'
 
 const ProductsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -17,6 +20,7 @@ const ProductsTable = () => {
   const [filter, setFilter] = useState('');
   const [openAgregarProducto, setOpenAgregarProducto] = useState(false);
   const [openEditarProducto, setOpenEditarProducto] = useState(false);
+  const [openEliminarProducto, setOpenEliminarProducto] = useState(false);
   const [products, setProducts] = useState(null);
   const [Refresh, setRefresh] = useState(false);  //state para actualizar la tabla cuando se edita o eliminan productos
   //const products = data.productos;
@@ -62,6 +66,16 @@ const ProductsTable = () => {
   const handleCloseEditarProducto = () => {
     setOpenEditarProducto(false);
   };
+
+  const handleOpenEliminarProducto = (request) => {
+    setSelectedRequest(request);
+    setOpenEliminarProducto(true);
+    console.log(request)
+  }
+  const handleCloseEliminarProducto = () => {
+    setOpenEliminarProducto(false);
+  }
+
   const filteredProducts = products ? products.filter((product) =>
     product.name.toLowerCase().includes(filter.toLowerCase())
   ) : [];
@@ -131,7 +145,7 @@ const ProductsTable = () => {
                         <IconButton onClick={() => handleOpenEditarProducto(product)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                           <Edit />
                         </IconButton>
-                        <IconButton onClick={() => handleOpenEditarProducto(product)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                        <IconButton onClick={() => handleOpenEliminarProducto(product)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
                           <Delete />
                         </IconButton>
                         </Box>
@@ -173,6 +187,12 @@ const ProductsTable = () => {
         open={openEditarProducto}
         onClose={handleCloseEditarProducto}
         request={selectedRequest}
+      />
+      <EliminarElemento
+        open={openEliminarProducto}
+        onClose={handleCloseEliminarProducto}
+        request={selectedRequest}
+        url={urlEliminate}
       />
     </Box>
   );
