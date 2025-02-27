@@ -26,6 +26,17 @@ import axios from 'axios';
     const [tecnicos, setTecnicos] = useState([]);
 
     useEffect(() => {
+      if (request) {
+        setTitulo(request.title || '');
+        setClienteId(request.cliente_id || '');
+        setEstado(request.estado || '');
+        setTecnicoId(request.tecnico_id || '');
+        setDescripcion(request.descripcion || '');
+        setFecha(request.fecha || '');
+      }
+    }, [request]);
+
+    useEffect(() => {
       console.log(request);
       axios.get('https://epco-ideas-back.onrender.com/productos/all')
       .then((res) => {
@@ -101,7 +112,13 @@ import axios from 'axios';
           <Box display="flex" flexDirection="column" gap={2} mt={2}>
             <Box>
               <Typography variant="h4" fontWeight="bold">Título</Typography>
-              <TextField id="titulo" placeholder="Titulo de solicitud" defaultValue={request.title} fullWidth onChange={(e)  => setTitulo(e.target.value)}></TextField>
+              <TextField 
+                id="titulo" 
+                placeholder="Titulo de solicitud" 
+                value={titulo}
+                fullWidth 
+                onChange={(e)  => setTitulo(e.target.value)}
+              ></TextField>
             </Box>
             <Box>
               <Typography variant="h4" fontWeight="bold">Cliente</Typography>
@@ -112,7 +129,6 @@ import axios from 'axios';
                   onChange={(e) => setClienteId(e.target.value)}
                   label="Cliente"
                   labelId="select-clientes"
-                  defaultValue={request.cliente_id}
                   MenuProps={{
                       PaperProps: {
                           style: {
@@ -137,7 +153,7 @@ import axios from 'axios';
                 <TextField 
                   id="fecha" 
                   placeholder="Fecha de creacion" 
-                  defaultValue={request.fecha}
+                  value={fecha}
                   fullWidth type="date"
                   onChange={(e) => setFecha(e.target.value)}
                 ></TextField>
@@ -150,13 +166,21 @@ import axios from 'axios';
             </Box> */}
             <Box>
               <Typography variant="h4" fontWeight="bold">Descripcion del caso</Typography>
-              <TextField id="descripcion" placeholder="Ingrese los detalles de la solicitud" defaultValue={request.descripcion} fullWidth multiline rows={3}></TextField>
+              <TextField 
+                id="descripcion" 
+                placeholder="Ingrese los detalles de la solicitud" 
+                value={descripcion}
+                fullWidth 
+                multiline 
+                rows={3}
+                onChange={(e) => setDescripcion(e.target.value)}
+              ></TextField>
             </Box>
             <Box sx={{display: 'flex', gap: 2}}>
                 <Box sx={{flex: 1}}>
                     <Typography variant="h4" fontWeight="bold">Estado del caso</Typography>
                     <FormControl fullWidth>
-                        <Select id="estado" value={estado} onChange={(e) => setEstado(e.target.value)} defaultValue={request.estado}>
+                        <Select id="estado" value={estado} onChange={(e) => setEstado(e.target.value)}>
                             <MenuItem value="En proceso">En proceso</MenuItem>
                             <MenuItem value="En espera">En espera</MenuItem>
                             <MenuItem value="Finalizado">Finalizado</MenuItem>
@@ -167,7 +191,7 @@ import axios from 'axios';
                 <Box sx={{flex: 1}}>
                     <Typography variant="h4" fontWeight="bold">Equipo de trabajo</Typography>
                     <FormControl fullWidth>
-                            <Select id="equipo" value={tecnico} onChange={(e) => setTecnicoId(e.target.value)} defaultValue={request.tecnico_id}>
+                            <Select id="equipo" value={tecnicoId} onChange={(e) => setTecnicoId(e.target.value)}>
                               {tecnicos.map((tecnico) => (
                                   <MenuItem key={tecnico.id} value={tecnico.id}>{tecnico.nombreCompleto}</MenuItem>
                               ))}
