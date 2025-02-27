@@ -52,7 +52,7 @@ export default function Sidebar() {
       >
         <Toolbar sx={{ height: "70px", display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5" noWrap component="div" color="black">
-            Header
+
           </Typography>
 
           {/* Usuario y Menú Desplegable */}
@@ -98,7 +98,7 @@ export default function Sidebar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar>EPCO</Toolbar>
+        <Toolbar><strong>EPCO - IDEAS</strong> </Toolbar>
         <Divider />
         <List>
           {["Solicitudes", "Tecnicos", "Almacen"].map((text) => (
