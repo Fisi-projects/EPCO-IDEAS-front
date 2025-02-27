@@ -85,6 +85,7 @@ const RequestsTable = () => {
   };
 
   const handleOpenEliminarSolicitud = (request) => {
+    console.log(request);
     setSelectedRequest(request);
     setOpenEliminarSolicitud(true);
   }
@@ -243,6 +244,7 @@ const RequestsTable = () => {
         open={openEliminarSolicitud}
         onClose={handleCloseEliminarSolicitud}
         request={selectedRequest}
+        handleRefresh={handleRefresh}
       />
     </Box>
   );

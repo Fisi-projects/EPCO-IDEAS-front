@@ -10,6 +10,8 @@ import EditarProducto from '../components/modals/Productos/editarProducto';
 import EliminarElemento from '../components/modals/eliminarElemento';
 import axios from 'axios';
 
+const urlEliminate = 'https://epco-ideas-back.onrender.com/productos/delete'
+
 const ProductsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
   const [order, setOrder] = useState('asc');
@@ -190,6 +192,7 @@ const ProductsTable = () => {
         open={openEliminarProducto}
         onClose={handleCloseEliminarProducto}
         request={selectedRequest}
+        url={urlEliminate}
       />
     </Box>
   );

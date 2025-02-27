@@ -4,6 +4,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { BorderAllRounded } from "@mui/icons-material";
+import axios from "axios";
 
 const style = {
     position: "absolute",
@@ -17,9 +18,24 @@ const style = {
     borderRadius: 1,
 };
 
-export default function EliminarElemento({open, onClose, request}) {
+export default function EliminarElemento({open, onClose, request, handleRefresh, url}) {
     if (!request) return null;
     
+    const onDelete = () =>{
+        axios.delete(`${url}/${request.id}`)
+        .then(() => {
+            alert("Elemento eliminado");
+            onClose();
+            handleRefresh();
+        })
+        .catch(() => {
+            alert("Error al eliminar el elemento");
+            onClose(); 
+        }
+        );
+        
+    }
+
     return (
         <Modal
         open={open}
@@ -34,7 +50,7 @@ export default function EliminarElemento({open, onClose, request}) {
                 </Box>
                 <Box display="flex" justifyContent="center" gap={2} mt={2}>
                     <Button variant="outlined" onClick={onClose}>Cancelar</Button>
-                    <Button variant="contained">Eliminar</Button>
+                    <Button variant="contained" onClick={onDelete} >Eliminar</Button>
                 </Box>
             </Box>
         </Modal>
