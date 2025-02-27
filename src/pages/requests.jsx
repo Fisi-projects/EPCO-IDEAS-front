@@ -41,10 +41,6 @@ const RequestsTable = () => {
     });
   } , [])
 
-  const handleRefresh = ()=>{
-    setRefresh(!refresh);
-  }
-
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
