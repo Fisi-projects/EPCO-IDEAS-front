@@ -9,7 +9,8 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
-import EliminarElemento from '../components/modals/eliminarElemento';
+
+import EliminarSolicitud from '../components/modals/Solicitud/EliminarSolicitud';
 import axios from 'axios';
 
 
@@ -24,27 +25,21 @@ const RequestsTable = () => {
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
 
   const [openEliminarSolicitud, setOpenEliminarSolicitud] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [rows , setRows] = useState([]);
+  const [rows, setRows] = useState([]);
 
-  //const rows = data.solicitud;
 
-  useEffect(()=>{
-    axios.get('https://epco-ideas-back.onrender.com/solicitudes/table')
-      .then(response => {
-        console.log(response);
-        console.log(response.data);
-        setRows(response.data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }, [refresh]);
-
-  // useEffect(() => {
-  //   fetch('http://localhost:3000/solicitud')
-  //     .then(response => response.json())
-  //     .then(data => setRows(data))
-  //     .catch(error => console.error('Error fetching data:', error));
-  // }, []);
+  useEffect(() => {
+    console.log('Requests being fetched');
+    axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
+    .then((res) => {
+      const sortedData = res.data.sort((a, b) => a.id - b.id);
+      setRows(sortedData);
+      console.log(sortedData);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } , [])
 
   const handleRefresh = ()=>{
     setRefresh(!refresh);
@@ -74,7 +69,6 @@ const RequestsTable = () => {
     setOpenVerSolicitud(false);
   };
   
-  
   const handleOpenEditarSolicitud = (request) => {
     setSelectedRequest(request);
     setOpenEditarSolicitud(true);
@@ -85,14 +79,26 @@ const RequestsTable = () => {
   };
 
   const handleOpenEliminarSolicitud = (request) => {
-    console.log(request);
+
     setSelectedRequest(request);
     setOpenEliminarSolicitud(true);
-  }
+  };
 
   const handleCloseEliminarSolicitud = () => {
     setOpenEliminarSolicitud(false);
-  }
+  };
+
+  const handleRefresh = () => {
+    axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
+    .then((res) => {
+      const sortedData = res.data.sort((a, b) => a.id - b.id);
+      setRows(sortedData);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
 
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
@@ -117,8 +123,6 @@ const RequestsTable = () => {
       <Button variant="contained" onClick={handleOpenAgregarSolicitud}>Agregar Solicitud</Button>
       </Box>
       
-      
-      {/* Tabla */}
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
@@ -142,11 +146,19 @@ const RequestsTable = () => {
               </TableHead>
               <TableBody>
                 {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow key={row?.id}>
-                    <TableCell>{row?.id}</TableCell>
-                    <TableCell>{row?.title}</TableCell>
-                    <TableCell>{row?.cliente_nombre}</TableCell>
-                    <TableCell>{row?.productos_nombres.join()}</TableCell>
+
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.title}</TableCell>
+                    <TableCell>{row.cliente_nombre}</TableCell>
+                    <TableCell>
+                      {row.productos_nombres.map((producto, index) => (
+                        <p key={index}>
+                          {producto.length > 20 ? `${producto.substring(0, 20)}...` : producto}
+                        </p>
+                      ))}
+                    </TableCell>
+
                     <TableCell>
                       <Chip
                         label={row?.estado}
@@ -169,7 +181,9 @@ const RequestsTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>{row?.tecnico_nombre}</TableCell>
+
+                    <TableCell>{row.tecnico_nombre}</TableCell>
+
                     <TableCell>
                         <Box
                             sx={{
@@ -193,7 +207,6 @@ const RequestsTable = () => {
                           <IconButton onClick={() => handleOpenEliminarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
                             <Delete />
                           </IconButton>
-                            
                         </Box>
                     </TableCell>
                   </TableRow>
@@ -229,7 +242,11 @@ const RequestsTable = () => {
           />
         </Grid>
       </Box>
-      <AgregarSolicitud open={openAgregarSolicitud} onClose={handleCloseAgregarSolicitud} />
+      <AgregarSolicitud 
+        open={openAgregarSolicitud} 
+        onClose={handleCloseAgregarSolicitud} 
+        handleRefresh={handleRefresh}
+      />
       <VerSolicitud
         open={openVerSolicitud}
         onClose={handleCloseVerSolicitud}
@@ -239,6 +256,13 @@ const RequestsTable = () => {
         open={openEditarSolicitud}
         onClose={handleCloseEditarSolicitud}
         request={selectedRequest}
+        handleRefresh={handleRefresh}
+      />
+      <EliminarSolicitud
+        open={openEliminarSolicitud}
+        onClose={handleCloseEliminarSolicitud}
+        request={selectedRequest}
+        handleRefresh={handleRefresh}
       />
       <EliminarElemento
         open={openEliminarSolicitud}
