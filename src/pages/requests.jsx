@@ -9,11 +9,9 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
-<<<<<<< HEAD
 import EliminarElemento from '../components/modals/eliminarElemento';
-=======
 import axios from 'axios';
->>>>>>> 1c97978 (conect requests)
+
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -24,11 +22,8 @@ const RequestsTable = () => {
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
   const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
-<<<<<<< HEAD
+
   const [openEliminarSolicitud, setOpenEliminarSolicitud] = useState(false);
-  
-  const rows = data.solicitud;
-=======
   const [refresh, setRefresh] = useState(false);
   const [rows , setRows] = useState([]);
 
@@ -43,7 +38,6 @@ const RequestsTable = () => {
       })
       .catch(error => console.error('Error fetching data:', error));
   }, [refresh]);
->>>>>>> 1c97978 (conect requests)
 
   // useEffect(() => {
   //   fetch('http://localhost:3000/solicitud')
