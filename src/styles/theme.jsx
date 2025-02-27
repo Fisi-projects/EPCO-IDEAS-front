@@ -31,6 +31,11 @@ const theme = createTheme({
             fontSize: "14px",
             fontWeight: 400,
             marginBottom: '8px',
+        }, 
+        h5: {                   //modal
+            fontSize: "16px",
+            fontWeight: 400,
+            marginBottom: '8px',
         },    
         body1: {                //Texto de tabla - Texto de modal - Sidebar
             fontSize: "14px",

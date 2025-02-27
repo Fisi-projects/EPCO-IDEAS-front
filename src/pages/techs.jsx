@@ -8,6 +8,7 @@ import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
 import data from '../data/db.json';
 import EditarTecnico from '../components/modals/Tecnicos/editarTecnico';
 import AgregarTecnico from '../components/modals/Tecnicos/agregarTecnico';
+import EliminarElemento from '../components/modals/eliminarElemento';
 
 const TechsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -17,6 +18,7 @@ const TechsTable = () => {
   const [filter, setFilter] = useState('');
   const [openAgregarTecnico, setOpenAgregarTecnico] = useState(false);
   const [openEditarTecnico, setOpenEditarTecnico] = useState(false);
+  const [openEliminarTecnico, setOpenEliminarTecnico] = useState(false);
   const techs = data.techs;
 
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -42,7 +44,13 @@ const TechsTable = () => {
   const handleCloseEditarTecnico = () => {
     setOpenEditarTecnico(false);
   };
-
+  const handleOpenEliminarTecnico = (request) => {
+    setSelectedRequest(request);
+    setOpenEliminarTecnico(true);
+  };
+  const handleCloseEliminarTecnico = () => {
+    setOpenEliminarTecnico(false);
+  };
   const filteredTechs = techs.filter((tech) =>
     tech.nombre.toLowerCase().includes(filter.toLowerCase())
   );
@@ -111,7 +119,7 @@ const TechsTable = () => {
                             <IconButton onClick={() => handleOpenEditarTecnico(tech)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                               <Edit />
                             </IconButton>
-                            <IconButton onClick={() => handleOpenEditarTecnico(tech)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                            <IconButton onClick={() => handleOpenEliminarTecnico(tech)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
                               <Delete />
                             </IconButton>
                         </Box>
@@ -151,6 +159,11 @@ const TechsTable = () => {
       <EditarTecnico
         open={openEditarTecnico}
         onClose={handleCloseEditarTecnico}
+        request={selectedRequest}
+      />
+      <EliminarElemento
+        open={openEliminarTecnico}
+        onClose={handleCloseEliminarTecnico}
         request={selectedRequest}
       />
     </Box>

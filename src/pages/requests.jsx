@@ -9,6 +9,7 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
+import EliminarElemento from '../components/modals/eliminarElemento';
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
@@ -19,6 +20,7 @@ const RequestsTable = () => {
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
   const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
+  const [openEliminarSolicitud, setOpenEliminarSolicitud] = useState(false);
   
   const rows = data.solicitud;
 
@@ -63,6 +65,14 @@ const RequestsTable = () => {
     setOpenEditarSolicitud(false);
   };
 
+  const handleOpenEliminarSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenEliminarSolicitud(true);
+  }
+
+  const handleCloseEliminarSolicitud = () => {
+    setOpenEliminarSolicitud(false);
+  }
 
   const filteredRows = rows.filter((row) =>
     row.titulo.toLowerCase().includes(filter.toLowerCase())
@@ -160,7 +170,7 @@ const RequestsTable = () => {
                           <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                             <Download />
                           </IconButton>
-                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                          <IconButton onClick={() => handleOpenEliminarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
                             <Delete />
                           </IconButton>
                             
@@ -208,6 +218,11 @@ const RequestsTable = () => {
       <EditarSolicitud
         open={openEditarSolicitud}
         onClose={handleCloseEditarSolicitud}
+        request={selectedRequest}
+      />
+      <EliminarElemento
+        open={openEliminarSolicitud}
+        onClose={handleCloseEliminarSolicitud}
         request={selectedRequest}
       />
     </Box>
