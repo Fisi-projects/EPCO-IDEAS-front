@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
   import { useEffect, useState } from 'react';
   
-  const EditarSolicitud = ({ open, onClose, request }) => {
+  const EditarSolicitud = ({ open, onClose, request, handleRefresh }) => {
     if (!request) return null; // Si no hay solicitud, no renderizar nada
     const [tecnico, setTecnico] = useState('');
 
@@ -53,7 +53,7 @@ import axios from 'axios';
     }, []);
       
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
       try {
         const formatFecha = (date) => {
           const fecha = new Date(date);
@@ -78,9 +78,12 @@ import axios from 'axios';
           Object.entries(solicitudUpdated).filter(([_, v]) => v !== '')
         );
         
-        const response = axios.put(`https://epco-ideas-back.onrender.com/solicitudes/update/${request.id}`, solicitudUpdated);
-        if (response.status === 200) {
+        const response = await axios.put(`https://epco-ideas-back.onrender.com/solicitudes/update/${request.id}`, solicitudUpdated);
+
+        if (response.status === 200 || response.status === 201 || response.status === 204) { 
           console.log('Solicitud actualizada correctamente');
+          handleRefresh();
+          onClose();
         }
 
       } catch (error) {

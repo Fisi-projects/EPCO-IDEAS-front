@@ -9,6 +9,7 @@ import data from '../data/db.json';
 import AgregarSolicitud from '../components/modals/Solicitud/agregarSolicitud';
 import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
+import EliminarSolicitud from '../components/modals/Solicitud/EliminarSolicitud';
 import axios from 'axios';
 
 const RequestsTable = () => {
@@ -20,20 +21,12 @@ const RequestsTable = () => {
   const [openAgregarSolicitud, setOpenAgregarSolicitud] = useState(false);
   const [openVerSolicitud, setOpenVerSolicitud] = useState(false);
   const [openEditarSolicitud, setOpenEditarSolicitud] = useState(false);
+  const [openEliminarSolicitud, setOpenEliminarSolicitud] = useState(false);
   const [rows, setRows] = useState([]);
 
-  //const rows = data.solicitud;
-
-  // useEffect(() => {
-  //   fetch('http://localhost:3000/solicitud')
-  //     .then(response => response.json())
-  //     .then(data => setRows(data))
-  //     .catch(error => console.error('Error fetching data:', error));
-  // }, []);
-  useEffect(()=>{
+  useEffect(() => {
     console.log('Requests being fetched');
     axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
-    // //http://localhost:3000/solicitudes/table
     .then((res) => {
       const sortedData = res.data.sort((a, b) => a.id - b.id);
       setRows(sortedData);
@@ -68,7 +61,6 @@ const RequestsTable = () => {
     setOpenVerSolicitud(false);
   };
   
-  
   const handleOpenEditarSolicitud = (request) => {
     setSelectedRequest(request);
     setOpenEditarSolicitud(true);
@@ -78,6 +70,25 @@ const RequestsTable = () => {
     setOpenEditarSolicitud(false);
   };
 
+  const handleOpenEliminarSolicitud = (request) => {
+    setSelectedRequest(request);
+    setOpenEliminarSolicitud(true);
+  };
+
+  const handleCloseEliminarSolicitud = () => {
+    setOpenEliminarSolicitud(false);
+  };
+
+  const handleRefresh = () => {
+    axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
+    .then((res) => {
+      const sortedData = res.data.sort((a, b) => a.id - b.id);
+      setRows(sortedData);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
 
   const filteredRows = rows.filter((row) =>
     row.title.toLowerCase().includes(filter.toLowerCase())
@@ -102,8 +113,6 @@ const RequestsTable = () => {
       <Button variant="contained" onClick={handleOpenAgregarSolicitud}>Agregar Solicitud</Button>
       </Box>
       
-      
-      {/* Tabla */}
       <Box>
         <Paper sx={{ padding: '10px 20px 15px'}}>
           <TableContainer>
@@ -181,10 +190,9 @@ const RequestsTable = () => {
                           <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                             <Download />
                           </IconButton>
-                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
+                          <IconButton onClick={() => handleOpenEliminarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
                             <Delete />
                           </IconButton>
-                            
                         </Box>
                     </TableCell>
                   </TableRow>
@@ -220,7 +228,11 @@ const RequestsTable = () => {
           />
         </Grid>
       </Box>
-      <AgregarSolicitud open={openAgregarSolicitud} onClose={handleCloseAgregarSolicitud} />
+      <AgregarSolicitud 
+        open={openAgregarSolicitud} 
+        onClose={handleCloseAgregarSolicitud} 
+        handleRefresh={handleRefresh}
+      />
       <VerSolicitud
         open={openVerSolicitud}
         onClose={handleCloseVerSolicitud}
@@ -230,6 +242,13 @@ const RequestsTable = () => {
         open={openEditarSolicitud}
         onClose={handleCloseEditarSolicitud}
         request={selectedRequest}
+        handleRefresh={handleRefresh}
+      />
+      <EliminarSolicitud
+        open={openEliminarSolicitud}
+        onClose={handleCloseEliminarSolicitud}
+        request={selectedRequest}
+        handleRefresh={handleRefresh}
       />
     </Box>
   );

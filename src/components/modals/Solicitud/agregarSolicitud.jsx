@@ -3,7 +3,7 @@ import { Close } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const AgregarSolicitud = ({ open, onClose }) => {
+const AgregarSolicitud = ({ open, onClose, handleRefresh }) => {
     // Datos de Solicitud
     const [titulo, setTitulo] = useState('');
     const [producto, setProducto] = useState('');
@@ -96,6 +96,7 @@ const AgregarSolicitud = ({ open, onClose }) => {
             const response = await axios.post('https://epco-ideas-back.onrender.com/solicitudes/create', dataToSend);
             if (response.status === 201) {
                 console.log('Solicitud creada exitosamente:', response.data);
+                handleRefresh();
                 onClose();
             } else {
                 console.error('Error al crear la solicitud:', response.data);
