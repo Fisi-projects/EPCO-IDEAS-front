@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, TextField, Button, Box, IconButton, Grid, Pagination, Typography,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  TableSortLabel, TextField, Button, Box, IconButton, Grid, Pagination, Typography, Menu, MenuItem
 } from '@mui/material';
-import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
+import { Edit, Delete,  FilterList, ArrowDropDown } from '@mui/icons-material';
 import EditarTecnico from '../components/modals/Tecnicos/editarTecnico';
 import AgregarTecnico from '../components/modals/Tecnicos/agregarTecnico';
 import EliminarElemento from '../components/modals/eliminarElemento';
@@ -19,11 +18,13 @@ const TechsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
+  const [filterField, setFilterField] = useState('nombres'); // Campo por defecto para filtrar
   const [openAgregarTecnico, setOpenAgregarTecnico] = useState(false);
   const [openEditarTecnico, setOpenEditarTecnico] = useState(false);
   const [openEliminarTecnico, setOpenEliminarTecnico] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [techs, setTechs] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null); // Para el menú desplegable
 
   const [selectedRequest, setSelectedRequest] = useState(null);
 
@@ -64,18 +65,73 @@ const TechsTable = () => {
   const handleCloseEditarTecnico = () => {
     setOpenEditarTecnico(false);
   };
+  
   const handleOpenEliminarTecnico = (request) => {
     setSelectedRequest(request);
     setOpenEliminarTecnico(true);
   };
+  
   const handleCloseEliminarTecnico = () => {
     setOpenEliminarTecnico(false);
   };
-  const filteredTechs = techs.filter((tech) =>
-    tech.nombres.toLowerCase().includes(filter.toLowerCase())
-  );
+  
+  // Abrir menú de filtros
+  const handleFilterClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Cerrar menú de filtros
+  const handleFilterClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Seleccionar campo de filtrado
+  const handleFilterFieldSelect = (field) => {
+    setFilterField(field);
+    setFilter(''); // Limpiar el filtro actual
+    handleFilterClose();
+  };
+
+  // Filtrar técnicos 
+  const filteredTechs = techs.filter((tech) => {
+    if (!filter) return true;
+    
+    const filterValue = filter.toLowerCase();
+    switch(filterField) {
+      case 'id':
+        return tech.id.toString().includes(filterValue);
+      case 'nombres':
+        return tech.nombres.toLowerCase().includes(filterValue);
+      case 'apellidos':
+        return tech.apellidos.toLowerCase().includes(filterValue);
+      case 'telefono':
+        return tech.telefono.toLowerCase().includes(filterValue);
+      case 'email':
+        return tech.email.toLowerCase().includes(filterValue);
+      case 'dni':
+        return tech.dni.toLowerCase().includes(filterValue);
+      case 'fecha_nac':
+        return tech.fecha_nac.split('T')[0].includes(filterValue);
+      default:
+        return tech.nombres.toLowerCase().includes(filterValue);
+    }
+  });
 
   const totalPages = Math.ceil(filteredTechs.length / rowsPerPage);
+
+
+  const getFilterFieldLabel = () => {
+    switch(filterField) {
+      case 'id': return 'ID';
+      case 'nombres': return 'Nombre';
+      case 'apellidos': return 'Apellido';
+      case 'telefono': return 'Celular';
+      case 'email': return 'Correo';
+      case 'dni': return 'DNI';
+      case 'fecha_nac': return 'F.Nacimiento';
+      default: return 'Nombre';
+    }
+  };
 
   return (
     <Box sx={{ padding: '20px 25px' }}>
@@ -85,11 +141,33 @@ const TechsTable = () => {
           <TextField
             size="small"
             variant="outlined"
-            placeholder="Buscar"
+            placeholder={`Buscar por ${getFilterFieldLabel()}`}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
-          <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<FilterList />}
+            endIcon={<ArrowDropDown />}
+            onClick={handleFilterClick}
+          >
+            Filtrar por: {getFilterFieldLabel()}
+          </Button>
+          
+          <Menu
+            id="filter-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleFilterClose}
+          >
+            <MenuItem onClick={() => handleFilterFieldSelect('id')}>ID</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('nombres')}>Nombre</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('apellidos')}>Apellido</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('telefono')}>Celular</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('email')}>Correo</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('dni')}>DNI</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('fecha_nac')}>F.Nacimiento</MenuItem>
+          </Menu>
         </Box>
         <Button variant="contained" onClick={handleOpenAgregarTecnico}>Agregar tecnico</Button>
       </Box>
