@@ -29,6 +29,7 @@ import axios from 'axios';
       console.log(response.data);
       alert('Tecnico agregado');
       handleRefresh();
+
     }).catch((error) => {
       console.log(error);
       alert('Error al agregar tecnico');

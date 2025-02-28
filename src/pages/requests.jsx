@@ -9,8 +9,8 @@ import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
 import EliminarSolicitud from '../components/modals/Solicitud/EliminarSolicitud';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
-const {user} = useContext(AuthContext)
+
+
 
 
 const RequestsTable = () => {
