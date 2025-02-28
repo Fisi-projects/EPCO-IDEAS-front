@@ -254,6 +254,7 @@ const ProductsTable = () => {
         open={openEditarProducto}
         onClose={handleCloseEditarProducto}
         request={selectedRequest}
+        handleRefresh={handleRefresh}
       />
       <EliminarElemento
         open={openEliminarProducto}

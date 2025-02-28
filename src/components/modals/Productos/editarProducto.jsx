@@ -22,9 +22,10 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-const EditarProducto = ({ open, onClose, request }) => {
+const EditarProducto = ({ open, onClose, request, handleRefresh }) => {
     const [stock, setStock] = useState(0);
     const [image, setImage] = useState(null);
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         if (request) {
@@ -34,14 +35,34 @@ const EditarProducto = ({ open, onClose, request }) => {
     }, [request]);
 
     const sendUpdate = () =>{
-        axios.put('https://epco-ideas-back.onrender.com/productos/update', {
-            id: request.id,
-            name: document.getElementById('nombre').value,
-            description: document.getElementById('descripcion').value,
-            price: document.getElementById('precio').value,
-            stock: stock,
-            image: image
+        const formData = new FormData();
+        formData.append('name', document.getElementById('nombre').value);
+        formData.append('description', document.getElementById('descripcion').value);
+        formData.append('price', document.getElementById('precio').value);
+        formData.append('stock', stock);
+        if (image) {
+            formData.append('image', file);
+        }
+        console.log(
+            document.getElementById('nombre').value,
+            document.getElementById('descripcion').value,
+            document.getElementById('precio').value,
+            stock,
+            file
+        )
+
+        axios.put(`https://epco-ideas-back.onrender.com/productos/update/${request.id}`, formData)
+        .then((res) => {
+            console.log(res.data)
+            alert('Producto actualizado correctamente');
+            handleRefresh();
+            onClose();
         })
+        .catch((error) => {
+            alert('Error al actualizar el producto');
+            console.log(error);
+        }
+        );
     }
 
     const handleStockChange = (change) => {
@@ -56,6 +77,7 @@ const EditarProducto = ({ open, onClose, request }) => {
             return;
         }
         setImage(URL.createObjectURL(selectedFile));
+        setFile(selectedFile);
     }
 
     const handleStockInputChange = (e) => {
@@ -89,7 +111,7 @@ const EditarProducto = ({ open, onClose, request }) => {
                     </Box>
                     <Box>
                         <Typography variant="h4" fontWeight="bold">Precio del producto</Typography>
-                        <TextField id="imagen" placeholder="Precio del producto" fullWidth defaultValue={request.price} />
+                        <TextField id="precio" placeholder="Precio del producto" fullWidth defaultValue={request.price} />
                     </Box>
                     <Box>
                         <Typography variant="h4" fontWeight="bold">Imagen del Producto</Typography>
@@ -120,7 +142,7 @@ const EditarProducto = ({ open, onClose, request }) => {
             </DialogContent>
             <DialogActions sx={{ m: '5px 15px' }}>
                 <Button onClick={onClose}>Cancelar</Button>
-                <Button variant="contained" onClick={onClose}>Guardar</Button>
+                <Button variant="contained" onClick={sendUpdate}>Guardar</Button>
             </DialogActions>
         </Dialog>
     );
