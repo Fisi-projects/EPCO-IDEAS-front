@@ -21,8 +21,8 @@ import axios from 'axios';
         nombres: document.getElementById('nombre').value,
         apellidos: document.getElementById('apellido').value,
         email: document.getElementById('email').value,
-        telefono: document.getElementById('celular').value,
         dni: document.getElementById('documento').value,
+        telefono: document.getElementById('celular').value,
         fecha_nac: document.getElementById('fecha_nac').value
       }
     ).then((response) => {
