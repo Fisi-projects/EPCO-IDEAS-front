@@ -18,11 +18,11 @@ import axios from 'axios';
           fecha_nac: document.getElementById('fecha_nac').value}
       )
       axios.post('https://epco-ideas-back.onrender.com/users/tecnicos/create',{
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
+        nombres: document.getElementById('nombre').value,
+        apellidos: document.getElementById('apellido').value,
         email: document.getElementById('email').value,
-        celular: document.getElementById('celular').value,
-        documento: document.getElementById('documento').value,
+        telefono: document.getElementById('celular').value,
+        dni: document.getElementById('documento').value,
         fecha_nac: document.getElementById('fecha_nac').value
       }
     ).then((response) => {
