@@ -74,17 +74,12 @@ export default function SignIn() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     try {
       const response = await loginApiCall(data.get('email'), data.get('password'))
-      console.log('Login successful', response.data)
       login(response.data.user, response.data.token)
       navigate('/')
     } catch (error) {
-      console.error(error)
+      alert('Error al iniciar sesion')
       //set password and email null
       data.set('password', '')
       data.set('email', '')

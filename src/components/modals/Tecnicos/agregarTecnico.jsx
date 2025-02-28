@@ -17,7 +17,7 @@ import axios from 'axios';
           documento: document.getElementById('documento').value,
           fecha_nac: document.getElementById('fecha_nac').value}
       )
-      axios.post('https://epco-ideas-back.onrender.com/users/tecnicos/all',{
+      axios.post('https://epco-ideas-back.onrender.com/users/tecnicos/create',{
         nombre: document.getElementById('nombre').value,
         apellido: document.getElementById('apellido').value,
         email: document.getElementById('email').value,

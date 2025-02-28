@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   TableSortLabel, TextField, Button, Box, IconButton, Chip, Grid, Pagination, Typography, Menu, MenuItem
@@ -9,6 +9,9 @@ import VerSolicitud from '../components/modals/Solicitud/verSolicitud';
 import EditarSolicitud from '../components/modals/Solicitud/editarSolicitud';
 import EliminarSolicitud from '../components/modals/Solicitud/EliminarSolicitud';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+const {user} = useContext(AuthContext)
+
 
 const RequestsTable = () => {
   const [orderBy, setOrderBy] = useState('id');
