@@ -79,6 +79,27 @@ const RequestsTable = () => {
     setOpenEliminarSolicitud(false);
   };
 
+  const handleDownloadSolicitud = async (request) => {
+    try {
+      const response = await axios.get(
+        `https://epco-ideas-back.onrender.com/solicitudes/pdf/${request.id}`, 
+        { responseType: 'blob' }
+      );
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Solicitud_${request.id}_${request.title}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+      
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
+  };
+
   const handleRefresh = () => {
     axios.get('https://epco-ideas-back.onrender.com/solicitudes/table') 
     .then((res) => {
@@ -187,7 +208,7 @@ const RequestsTable = () => {
                           <IconButton onClick={() => handleOpenEditarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                             <Edit />
                           </IconButton>
-                          <IconButton onClick={() => handleOpenVerSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
+                          <IconButton onClick={() => handleDownloadSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%'}}>
                             <Download />
                           </IconButton>
                           <IconButton onClick={() => handleOpenEliminarSolicitud(row)} sx={{border: '1px solid #D9D9D9', borderRadius: '10%', borderColor: '#F03D3E', color: '#F03D3E'}}>
