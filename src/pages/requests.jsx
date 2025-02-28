@@ -251,10 +251,8 @@ const RequestsTable = () => {
                                   '#F27573',
                           borderRadius: '3px',
                           padding: '4px 8px',
-                          width: '92px',
                           height: '25px',
-                          fontWeight: 'bold',
-                          overflow: 'visible' 
+                          fontWeight: 'bold',             
                         }}
                       />
                     </TableCell>
