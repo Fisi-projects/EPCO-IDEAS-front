@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   TableSortLabel, TextField, Button, Box, IconButton, Grid, Pagination, Typography,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  Menu, MenuItem,
 } from '@mui/material';
-import { Edit, Delete, Close, FilterList } from '@mui/icons-material';
+import { Edit, Delete,  FilterList, ArrowDropDown } from '@mui/icons-material';
 import AgregarProducto from '../components/modals/Productos/agregarProducto';
 import EditarProducto from '../components/modals/Productos/editarProducto';
 import EliminarElemento from '../components/modals/eliminarElemento';
@@ -18,12 +18,13 @@ const ProductsTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [filter, setFilter] = useState('');
+  const [filterField, setFilterField] = useState('name'); // Campo por defecto para filtrar
   const [openAgregarProducto, setOpenAgregarProducto] = useState(false);
   const [openEditarProducto, setOpenEditarProducto] = useState(false);
   const [openEliminarProducto, setOpenEliminarProducto] = useState(false);
   const [products, setProducts] = useState(null);
   const [Refresh, setRefresh] = useState(false);  //state para actualizar la tabla cuando se edita o eliminan productos
-  //const products = data.productos;
+  const [anchorEl, setAnchorEl] = useState(null); // Para el menú desplegable
 
   const handleRefresh = ()=>{
     setRefresh(!Refresh)
@@ -76,11 +77,56 @@ const ProductsTable = () => {
     setOpenEliminarProducto(false);
   }
 
-  const filteredProducts = products ? products.filter((product) =>
-    product.name.toLowerCase().includes(filter.toLowerCase())
-  ) : [];
+  // Abrir menú de filtros
+  const handleFilterClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Cerrar menú de filtros
+  const handleFilterClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Seleccionar campo de filtrado
+  const handleFilterFieldSelect = (field) => {
+    setFilterField(field);
+    setFilter(''); // Limpiar el filtro actual
+    handleFilterClose();
+  };
+
+  // Filtrar productos 
+  const filteredProducts = products ? products.filter((product) => {
+    if (!filter) return true;
+    
+    const filterValue = filter.toLowerCase();
+    switch(filterField) {
+      case 'id':
+        return product.id.toString().includes(filterValue);
+      case 'name':
+        return product.name.toLowerCase().includes(filterValue);
+      case 'description':
+        return product.description.toLowerCase().includes(filterValue);
+      case 'price':
+        return product.price.toString().includes(filterValue);
+      case 'stock':
+        return product.stock.toString().includes(filterValue);
+      default:
+        return product.name.toLowerCase().includes(filterValue);
+    }
+  }) : [];
 
   const totalPages = Math.ceil(filteredProducts.length / rowsPerPage);
+
+  const getFilterFieldLabel = () => {
+    switch(filterField) {
+      case 'id': return 'ID';
+      case 'name': return 'Nombre';
+      case 'description': return 'Descripción';
+      case 'price': return 'Precio';
+      case 'stock': return 'Stock';
+      default: return 'Nombre';
+    }
+  };
 
   return (
     <Box sx={{ padding: '20px 25px' }}>
@@ -90,11 +136,32 @@ const ProductsTable = () => {
           <TextField
             size="small"
             variant="outlined"
-            placeholder="Buscar"
+            placeholder={`Buscar por ${getFilterFieldLabel()}`}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
-          <Button variant="outlined" startIcon={<FilterList />}>Filtrar por</Button>
+          
+          <Button 
+            variant="outlined" 
+            startIcon={<FilterList />}
+            endIcon={<ArrowDropDown />}
+            onClick={handleFilterClick}
+          >
+            Filtrar por: {getFilterFieldLabel()}
+          </Button>
+
+          <Menu
+            id="filter-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleFilterClose}
+          >
+            <MenuItem onClick={() => handleFilterFieldSelect('id')}>ID</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('name')}>Nombre</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('description')}>Descripción</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('price')}>Precio</MenuItem>
+            <MenuItem onClick={() => handleFilterFieldSelect('stock')}>Stock</MenuItem>
+          </Menu>
         </Box>
         <Button variant="contained" onClick={handleOpenAgregarProducto}>Agregar Producto</Button>
       </Box>
