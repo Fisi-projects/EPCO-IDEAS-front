@@ -14,7 +14,7 @@ const EliminarSolicitud = ({ open, onClose, request, handleRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:3000/solicitudes/delete/${request.id}`);
+      const response = await axios.delete(`https://epco-ideas-back.onrender.com/solicitudes/delete/${request.id}`);
       if (response.status === 200) {
         console.log('Solicitud eliminada correctamente');
         handleRefresh();
